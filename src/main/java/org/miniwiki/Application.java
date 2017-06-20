@@ -37,7 +37,7 @@ public class Application implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         new Context(sce.getServletContext()).registerServer(
             "Page",
-            new PageServlet(new Pages(new File(System.getProperty("user.home"), ".miniwiki"))),
+            new PageServlet(new Pages(new File(System.getProperty("user.home"), ".wikimark"))),
             "/pages/*"
         );
     }
