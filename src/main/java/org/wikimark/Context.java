@@ -21,25 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.miniwiki;
+package org.wikimark;
 
-import java.io.File;
-import java.util.Optional;
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
 
 /**
  *
  * @author Martín Straus
  */
-public class Pages {
+public class Context {
 
-    private final File root;
+    private final ServletContext context;
 
-    public Pages(File root) {
-        this.root = root;
+    public Context(ServletContext context) {
+        this.context = context;
     }
 
-    public Optional<FilePage> find(String name) {
-        final File file = new File(root, name);
-        return file.exists() ? Optional.of(new FilePage(file)) : Optional.empty();
+    public Context registerServer(String name, Servlet servlet, String... mappings) {
+        context.addServlet(name, servlet);
+        context.getServletRegistration("Page").addMapping(mappings);
+        return this;
     }
+
 }

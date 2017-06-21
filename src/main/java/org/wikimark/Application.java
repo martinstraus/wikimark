@@ -21,21 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.miniwiki;
+package org.wikimark;
 
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
+import java.io.File;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 /**
  *
  * @author Martín Straus
  */
-public class CommonMark {
+public class Application implements ServletContextListener {
 
-    private final HtmlRenderer htmlRenderer = HtmlRenderer.builder().build();
-    private final Parser parser = Parser.builder().build();
-
-    public String asHTML(String commonmark) {
-        return htmlRenderer.render(parser.parse(commonmark));
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        new Context(sce.getServletContext()).registerServer(
+            "Page",
+            new PageServlet(new Pages(new File(System.getProperty("user.home"), ".wikimark"))),
+            "/pages/*"
+        );
     }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+
+    }
+
 }

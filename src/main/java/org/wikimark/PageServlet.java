@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.miniwiki;
+package org.wikimark;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -52,4 +52,5 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
         }
     }
 
+    
 }
