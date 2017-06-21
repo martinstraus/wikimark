@@ -23,51 +23,29 @@
  */
 package org.wikimark;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author Martín Straus
  */
-public class Pages {
+public class CreatePageForm {
+    private final HttpServletRequest request;
 
-    private final File root;
-
-    public Pages(File root) {
-        this.root = root;
+    public CreatePageForm(HttpServletRequest request) {
+        this.request = request;
     }
-
-    public Optional<FilePage> find(String name) {
-        final File file = new File(root, name);
-        return file.exists() ? Optional.of(new FilePage(file)) : Optional.empty();
+    
+    public CreatePageForm validate() {
+        return this;
     }
-
-    public FilePage create(String name, String content) {
-        return new FilePage(saveOrUpdate(newOrExistingFile(name), content));
+    
+    public String name() {
+        return request.getPathInfo();
     }
-
-    private File newOrExistingFile(String name) {
-        final File file = new File(root, name);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException ex) {
-                throw new RuntimeException("Could not create file " + name);
-            }
-        }
-        return file;
+    
+    public String content() {
+        return request.getParameter("content");
     }
-
-    private File saveOrUpdate(File file, String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write(content);
-            return file;
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+    
 }

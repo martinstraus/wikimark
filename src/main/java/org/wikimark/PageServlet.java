@@ -52,5 +52,12 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
         }
     }
 
-    
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        final CreatePageForm form = new CreatePageForm(req).validate();
+        FilePage page = pages.create(form.name(), form.content());
+        resp.setStatus(HttpServletResponse.SC_SEE_OTHER);
+        resp.setHeader("location", page.url());
+    }
+
 }

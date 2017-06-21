@@ -56,4 +56,7 @@ public class FilePage {
         return builder.toString();
     }
 
+    public String url() {
+        return file.getName();
+    }
 }
