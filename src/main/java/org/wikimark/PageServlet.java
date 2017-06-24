@@ -35,9 +35,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PageServlet extends javax.servlet.http.HttpServlet {
 
+    private final Context context;
     private final Pages pages;
 
-    public PageServlet(Pages pages) {
+    public PageServlet(Context context, Pages pages) {
+        this.context = context;
         this.pages = pages;
     }
 
@@ -57,7 +59,7 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
         final CreatePageForm form = new CreatePageForm(req).validate();
         FilePage page = pages.create(form.name(), form.content());
         resp.setStatus(HttpServletResponse.SC_SEE_OTHER);
-        resp.setHeader("location", page.url());
+        resp.setHeader("location", page.urlRelativeToHost(context));
     }
 
 }

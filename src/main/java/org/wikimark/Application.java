@@ -35,11 +35,12 @@ public class Application implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        new Context(sce.getServletContext()).registerServer(
-            "Page",
-            new PageServlet(new Pages(new File(System.getProperty("user.home"), ".wikimark"))),
-            "/pages/*"
-        );
+        final Pages pages = new Pages(new File(System.getProperty("user.home"), ".wikimark"));
+        final Context context = new Context(sce.getServletContext());
+        context
+            .registerServlet("Page", new PageServlet(context, pages), "/pages/*")
+            .registerServlet("LogIn", new LogInServlet(), "/login")
+            .registerServlet("Create page", new CreatePageServlet(context, pages), "/new-page");
     }
 
     @Override

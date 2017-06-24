@@ -4,16 +4,16 @@
         <listener-class>org.wikimark.Application</listener-class>
     </listener>
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
     <security-constraint>
         <display-name>Edition</display-name>
         <web-resource-collection>
-            <web-resource-name>Pages</web-resource-name>
+            <web-resource-name>Secure resources</web-resource-name>
             <description/>
             <url-pattern>/pages/*</url-pattern>
+            <url-pattern>/new-page.jsp</url-pattern>
+            <url-pattern>/new-page</url-pattern>
             <http-method>PUT</http-method>
             <http-method>POST</http-method>
             <http-method>DELETE</http-method>
@@ -24,10 +24,26 @@
         </auth-constraint>
     </security-constraint>
     <login-config>
-        <auth-method>BASIC</auth-method>
+        <auth-method>FORM</auth-method>
+        <realm-name>wikimark</realm-name>
+        <form-login-config>
+            <form-login-page>/login.html</form-login-page>
+            <form-error-page>/login.html</form-error-page>
+        </form-login-config>
     </login-config>
     <security-role>
         <description/>
         <role-name>editor</role-name>
     </security-role>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/errors/not-found.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/errors/500.jsp</location>location>
+    </error-page>
 </web-app>

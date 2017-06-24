@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Martín Straus.
+ * Copyright 2017 Wikimark.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,29 +23,28 @@
  */
 package org.wikimark;
 
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Martín Straus
  */
-public class Context {
+public class LogInServlet extends HttpServlet {
 
-    private final ServletContext context;
-
-    public Context(ServletContext context) {
-        this.context = context;
-    }
-
-    public Context registerServlet(String name, Servlet servlet, String... mappings) {
-        context.addServlet(name, servlet);
-        context.getServletRegistration(name).addMapping(mappings);
-        return this;
-    }
-
-    public String urlRelativeToHost(String url) {
-        return context.getContextPath() + url;
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            req.login(req.getParameter("j_username"), req.getParameter("j_password"));
+            resp.sendRedirect(req.getContextPath());
+        } catch (ServletException ex) {
+            ex.printStackTrace();
+            req.setAttribute("mensaje", "Error de autenticación.");
+            req.getRequestDispatcher("index.jsp").forward(req, resp);
+        }
     }
 
 }

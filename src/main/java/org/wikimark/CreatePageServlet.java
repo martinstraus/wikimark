@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Martín Straus.
+ * Copyright 2017 Wikimark.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,29 +23,37 @@
  */
 package org.wikimark;
 
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Martín Straus
  */
-public class Context {
+public class CreatePageServlet extends HttpServlet {
 
-    private final ServletContext context;
+    private final Context context;
+    private final Pages pages;
 
-    public Context(ServletContext context) {
+    public CreatePageServlet(Context context, Pages pages) {
         this.context = context;
+        this.pages = pages;
     }
 
-    public Context registerServlet(String name, Servlet servlet, String... mappings) {
-        context.addServlet(name, servlet);
-        context.getServletRegistration(name).addMapping(mappings);
-        return this;
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/pages/new-page.jsp").forward(req, resp);
     }
 
-    public String urlRelativeToHost(String url) {
-        return context.getContextPath() + url;
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        final NewPageForm form = new NewPageForm(req).validate();
+        FilePage page = pages.create(form.name(), form.content());
+        resp.setStatus(HttpServletResponse.SC_SEE_OTHER);
+        resp.setHeader("location", page.urlRelativeToHost(context));
     }
 
 }

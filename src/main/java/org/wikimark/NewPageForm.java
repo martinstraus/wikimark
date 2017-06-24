@@ -23,29 +23,31 @@
  */
 package org.wikimark;
 
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author Martín Straus
  */
-public class Context {
+public class NewPageForm {
 
-    private final ServletContext context;
+    private final HttpServletRequest request;
 
-    public Context(ServletContext context) {
-        this.context = context;
+    public NewPageForm(HttpServletRequest request) {
+        this.request = request;
     }
 
-    public Context registerServlet(String name, Servlet servlet, String... mappings) {
-        context.addServlet(name, servlet);
-        context.getServletRegistration(name).addMapping(mappings);
+    public NewPageForm validate() {
         return this;
     }
 
-    public String urlRelativeToHost(String url) {
-        return context.getContextPath() + url;
+    public String name() {
+        final String name = request.getParameter("name");
+        return name.endsWith(".md") ? name : name.concat(".md");
+    }
+
+    public String content() {
+        return request.getParameter("content");
     }
 
 }

@@ -59,4 +59,8 @@ public class FilePage {
     public String url() {
         return file.getName();
     }
+
+    public String urlRelativeToHost(Context context) {
+        return context.urlRelativeToHost("/pages/".concat(file.getName()));
+    }
 }
