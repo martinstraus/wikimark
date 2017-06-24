@@ -23,37 +23,53 @@
  */
 package org.wikimark;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Martín Straus
  */
-public class CreatePageServlet extends HttpServlet {
+public class PageFile {
 
-    private final Context context;
-    private final Pages pages;
+    private final java.io.File file;
 
-    public CreatePageServlet(Context context, Pages pages) {
-        this.context = context;
-        this.pages = pages;
+    public PageFile(java.io.File name) {
+        this.file = name;
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/pages/new-page.jsp").forward(req, resp);
+    public PageFile saveOrUpdate(String content) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(newOrExistingFile()))) {
+            writer.write(content);
+            return this;
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final NewPageForm form = new NewPageForm(req).validate();
-        Page page = pages.create(form.name(), form.content());
-        resp.setStatus(HttpServletResponse.SC_SEE_OTHER);
-        resp.setHeader("location", page.urlRelativeToHost(context));
+    private java.io.File newOrExistingFile() {
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException ex) {
+                throw new RuntimeException("Could not create file " + file.getName());
+            }
+        }
+        return file;
     }
 
+    public String read() throws IOException {
+        final StringBuilder builder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            reader.lines().forEach((line) -> builder.append(line).append('\r').append('\n'));
+        }
+        return builder.toString();
+    }
+
+    public String name() {
+        return file.getName();
+    }
 }

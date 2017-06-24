@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Martín Straus.
+ * Copyright 2017 Wikimark.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,32 +23,46 @@
  */
 package org.wikimark;
 
-import java.io.File;
-import java.util.Optional;
-
 /**
  *
  * @author Martín Straus
  */
-public class Pages {
+public class VelocityContextAdapter implements org.apache.velocity.context.Context {
 
-    private final File root;
-    private final Template template;
+    private final PageContext pageContext;
 
-    public Pages(File root, Template template) {
-        this.root = root;
-        this.template = template;
+    public VelocityContextAdapter(PageContext pageContext) {
+        this.pageContext = pageContext;
     }
 
-    public Optional<Page> find(String name) {
-        final File file = new File(root, name);
-        return file.exists()
-            ? Optional.of(new Page(new org.wikimark.PageFile(file), template))
-            : Optional.empty();
+    @Override
+    public Object put(String string, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Page create(String name, String content) {
-        return new Page(new org.wikimark.PageFile(new java.io.File(root, name)).saveOrUpdate(content), template);
+    @Override
+    public Object get(String string) {
+        switch (string) {
+            case "page":
+                return pageContext;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public boolean containsKey(Object o) {
+        return o.equals("page");
+    }
+
+    @Override
+    public Object[] getKeys() {
+        return new String[]{"page"};
+    }
+
+    @Override
+    public Object remove(Object o) {
+        return null;
     }
 
 }

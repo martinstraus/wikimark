@@ -1,7 +1,9 @@
+package org.wikimark;
+
 /*
  * The MIT License
  *
- * Copyright 2017 Martín Straus.
+ * Copyright 2017 Wikimark.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,34 +23,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.wikimark;
-
-import java.io.File;
-import java.util.Optional;
 
 /**
  *
  * @author Martín Straus
  */
-public class Pages {
+public class DummyTemplate implements Template {
 
-    private final File root;
-    private final Template template;
-
-    public Pages(File root, Template template) {
-        this.root = root;
-        this.template = template;
+    @Override
+    public String render(PageContext context) {
+        return "";
     }
-
-    public Optional<Page> find(String name) {
-        final File file = new File(root, name);
-        return file.exists()
-            ? Optional.of(new Page(new org.wikimark.PageFile(file), template))
-            : Optional.empty();
-    }
-
-    public Page create(String name, String content) {
-        return new Page(new org.wikimark.PageFile(new java.io.File(root, name)).saveOrUpdate(content), template);
-    }
-
+    
 }

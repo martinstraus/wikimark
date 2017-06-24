@@ -45,7 +45,7 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Optional<FilePage> page = pages.find(req.getPathInfo());
+        Optional<Page> page = pages.find(req.getPathInfo());
         if (page.isPresent()) {
             resp.setContentType("text/html");
             resp.getOutputStream().print(page.get().asHTML());
@@ -57,7 +57,7 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final CreatePageForm form = new CreatePageForm(req).validate();
-        FilePage page = pages.create(form.name(), form.content());
+        Page page = pages.create(form.name(), form.content());
         resp.setStatus(HttpServletResponse.SC_SEE_OTHER);
         resp.setHeader("location", page.urlRelativeToHost(context));
     }

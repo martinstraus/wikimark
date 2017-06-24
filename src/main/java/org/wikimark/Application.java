@@ -26,6 +26,9 @@ package org.wikimark;
 import java.io.File;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 /**
  *
@@ -35,12 +38,22 @@ public class Application implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        final Pages pages = new Pages(new File(System.getProperty("user.home"), ".wikimark"));
+        final Pages pages = new Pages(
+            new File(System.getProperty("user.home"), ".wikimark"),
+            new VelocityTemplate(velocity(), "org/wikimark/page-template.vsl")
+        );
         final Context context = new Context(sce.getServletContext());
         context
             .registerServlet("Page", new PageServlet(context, pages), "/pages/*")
             .registerServlet("LogIn", new LogInServlet(), "/login")
             .registerServlet("Create page", new CreatePageServlet(context, pages), "/new-page");
+    }
+
+    private VelocityEngine velocity() {
+        VelocityEngine velocity = new VelocityEngine();
+        velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+        velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+        return velocity;
     }
 
     @Override

@@ -23,44 +23,40 @@
  */
 package org.wikimark;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 /**
  *
  * @author Martín Straus
  */
-public class FilePage {
+public class Page {
 
-    private final File file;
+    private final PageFile file;
+    private final Template template;
 
-    public FilePage(File file) {
+    public Page(PageFile file, Template template) {
         this.file = file;
+        this.template = template;
     }
 
     public String asHTML() {
-        try {
-            return new CommonMark().asHTML(readFile());
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    private String readFile() throws IOException {
-        final StringBuilder builder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            reader.lines().forEach((line) -> builder.append(line).append('\r').append('\n'));
-        }
-        return builder.toString();
+        return template.render(new PageContext() {
+            @Override
+            public String content() {
+                try {
+                    return new CommonMark().asHTML(file.read());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
     public String url() {
-        return file.getName();
+        return file.name();
     }
 
     public String urlRelativeToHost(Context context) {
-        return context.urlRelativeToHost("/pages/".concat(file.getName()));
+        return context.urlRelativeToHost("/pages/".concat(file.name()));
     }
 }

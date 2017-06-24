@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Martín Straus.
+ * Copyright 2017 Wikimark.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,32 +23,23 @@
  */
 package org.wikimark;
 
-import java.io.File;
-import java.util.Optional;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import org.junit.Test;
 
 /**
  *
  * @author Martín Straus
  */
-public class Pages {
-
-    private final File root;
-    private final Template template;
-
-    public Pages(File root, Template template) {
-        this.root = root;
-        this.template = template;
+public class PagesTest {
+    
+    @Test
+    public void fileExistsAfterCreation() throws IOException {
+        final Path tempdir = Files.createTempDirectory(".wikimark-it");
+        new Pages(tempdir.toFile(), new DummyTemplate()).create("test.md", "test");
+        assertThat("file for new page exists", tempdir.resolve("test.md").toFile().exists(), is(true));
     }
-
-    public Optional<Page> find(String name) {
-        final File file = new File(root, name);
-        return file.exists()
-            ? Optional.of(new Page(new org.wikimark.PageFile(file), template))
-            : Optional.empty();
-    }
-
-    public Page create(String name, String content) {
-        return new Page(new org.wikimark.PageFile(new java.io.File(root, name)).saveOrUpdate(content), template);
-    }
-
 }
