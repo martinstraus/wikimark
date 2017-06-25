@@ -23,24 +23,29 @@
  */
 package org.wikimark;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Collections;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import org.junit.Test;
+import static java.util.Arrays.asList;
+import java.util.Set;
+import static java.util.stream.Collectors.toSet;
 
 /**
  *
  * @author Martín Straus
  */
-public class PagesTest {
+public class SplitString {
 
-    @Test
-    public void fileExistsAfterCreation() throws IOException {
-        final Path tempdir = Files.createTempDirectory(".wikimark-it");
-        new Pages(tempdir.toFile(), new DummyTemplate()).create("test.md", "test");
-        assertThat("file for new page exists", tempdir.resolve("test.md").toFile().exists(), is(true));
+    private final String string;
+    private final String separator;
+
+    public SplitString(String string, String separator) {
+        this.string = string;
+        this.separator = separator;
+    }
+
+    public Set<String> values() {
+        return asList(string.split(separator))
+            .stream()
+            .map((k) -> k.trim())
+            .filter((k) -> !k.isEmpty())
+            .collect(toSet());
     }
 }

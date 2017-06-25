@@ -43,12 +43,12 @@ public class Pages {
     public Optional<Page> find(String name) {
         final File file = new File(root, name);
         return file.exists()
-            ? Optional.of(new Page(new org.wikimark.PageFile(file), template))
+            ? Optional.of(new Page(file, template))
             : Optional.empty();
     }
 
     public Page create(String name, String content) {
-        return new Page(new org.wikimark.PageFile(new java.io.File(root, name)).saveOrUpdate(content), template);
+        return new Page(new java.io.File(root, name), template).saveOrUpdate(content);
     }
 
 }

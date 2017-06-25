@@ -28,6 +28,8 @@ package org.wikimark;
  * @author Martín Straus
  */
 public interface PageContext {
+    
+    java.util.List<String> keywords();
 
     String content();
 }

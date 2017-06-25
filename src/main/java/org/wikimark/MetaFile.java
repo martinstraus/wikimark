@@ -23,24 +23,23 @@
  */
 package org.wikimark;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Collections;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import org.junit.Test;
+import java.util.Set;
 
 /**
  *
  * @author Martín Straus
  */
-public class PagesTest {
+public class MetaFile {
+    
+    private final PropertiesFile properties;
 
-    @Test
-    public void fileExistsAfterCreation() throws IOException {
-        final Path tempdir = Files.createTempDirectory(".wikimark-it");
-        new Pages(tempdir.toFile(), new DummyTemplate()).create("test.md", "test");
-        assertThat("file for new page exists", tempdir.resolve("test.md").toFile().exists(), is(true));
+    public MetaFile(File file) throws IOException {
+        this.properties = new PropertiesFile(file);
+    }
+    
+    public Set<String> keywords() throws IOException {
+        return new SplitString(properties.value("keywords"), ",").values();
     }
 }

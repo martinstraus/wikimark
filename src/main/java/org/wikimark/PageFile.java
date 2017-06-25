@@ -23,11 +23,7 @@
  */
 package org.wikimark;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 /**
  *
@@ -35,9 +31,9 @@ import java.io.IOException;
  */
 public class PageFile {
 
-    private final java.io.File file;
+    private final File file;
 
-    public PageFile(java.io.File name) {
+    public PageFile(File name) {
         this.file = name;
     }
 
@@ -50,7 +46,7 @@ public class PageFile {
         }
     }
 
-    private java.io.File newOrExistingFile() {
+    private File newOrExistingFile() {
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -71,5 +67,9 @@ public class PageFile {
 
     public String name() {
         return file.getName();
+    }
+
+    public File location() {
+        return file.getParentFile();
     }
 }

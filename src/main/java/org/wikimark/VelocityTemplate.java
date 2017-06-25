@@ -25,6 +25,7 @@ package org.wikimark;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
 /**
@@ -44,7 +45,7 @@ public class VelocityTemplate implements Template {
     @Override
     public String render(PageContext context) {
         try (final StringWriter writer = new StringWriter()) {
-            engine.getTemplate(template).merge(new VelocityContextAdapter(context), writer);
+            engine.getTemplate(template).merge(new VelocityContext(new VelocityContextAdapter(context)), writer);
             writer.flush();
             return writer.toString();
         } catch (IOException ex) {

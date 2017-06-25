@@ -23,12 +23,16 @@
  */
 package org.wikimark;
 
+import static java.util.Arrays.asList;
+import java.util.List;
+
 /**
  *
  * @author Martín Straus
  */
 public class VelocityContextAdapter implements org.apache.velocity.context.Context {
 
+    private final List<String> keys = asList("page", "keywords");
     private final PageContext pageContext;
 
     public VelocityContextAdapter(PageContext pageContext) {
@@ -37,7 +41,7 @@ public class VelocityContextAdapter implements org.apache.velocity.context.Conte
 
     @Override
     public Object put(String string, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -45,6 +49,8 @@ public class VelocityContextAdapter implements org.apache.velocity.context.Conte
         switch (string) {
             case "page":
                 return pageContext;
+            case "keywords":
+                return pageContext.keywords().toArray();
             default:
                 return null;
         }
@@ -52,12 +58,12 @@ public class VelocityContextAdapter implements org.apache.velocity.context.Conte
 
     @Override
     public boolean containsKey(Object o) {
-        return o.equals("page");
+        return keys.contains(o);
     }
 
     @Override
     public Object[] getKeys() {
-        return new String[]{"page"};
+        return keys.toArray();
     }
 
     @Override
