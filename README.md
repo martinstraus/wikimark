@@ -12,3 +12,22 @@ Clone the repository and build with [Gradle](https://gradle.org/)
 
 Deploy ```build\wikimark.war``` on your container of choice. The root directory for wiki pages is 
 ```${user.home}/.wikimark```.
+
+## File format
+
+All pages are stored in files with the following format:
+
+    title=The title
+    author=The author
+    keywords=keyword 1,keyword 2
+    CommonMark content
+
+Example:
+
+    title=Test page
+    author=Martín Straus
+    keywords=java,wiki,commonmark
+    #Wikimark
+    This is the content of a sample page
+
+
