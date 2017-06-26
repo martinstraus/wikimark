@@ -23,49 +23,24 @@
  */
 package org.wikimark;
 
-import java.io.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import org.junit.Test;
 
 /**
  *
  * @author Martín Straus
  */
-public class PageFile {
+public class StringPropertyTest {
 
-    private final File file;
-
-    public PageFile(File name) {
-        this.file = name;
+    @Test
+    public void keyHasCorrectValue() {
+        assertThat("key", new StringProperty("key=value").key(), is("key"));
     }
 
-    public PageFile saveOrUpdate(String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(newOrExistingFile()))) {
-            writer.write(content);
-            return this;
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+    @Test
+    public void valueHasCorrectValue() {
+        assertThat("value", new StringProperty("key=value").value(), is("value"));
     }
 
-    private File newOrExistingFile() {
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException ex) {
-                throw new RuntimeException("Could not create file " + file.getName());
-            }
-        }
-        return file;
-    }
-
-    public InputStream read() throws IOException {
-        return new FileInputStream(file);
-    }
-
-    public String name() {
-        return file.getName();
-    }
-
-    public File location() {
-        return file.getParentFile();
-    }
 }

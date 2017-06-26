@@ -23,49 +23,23 @@
  */
 package org.wikimark;
 
-import java.io.*;
-
 /**
  *
  * @author Martín Straus
  */
-public class PageFile {
+public class StringProperty {
 
-    private final File file;
+    private final String string;
 
-    public PageFile(File name) {
-        this.file = name;
+    public StringProperty(String string) {
+        this.string = string;
     }
 
-    public PageFile saveOrUpdate(String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(newOrExistingFile()))) {
-            writer.write(content);
-            return this;
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+    public String key() {
+        return string.substring(0, string.indexOf("="));
     }
 
-    private File newOrExistingFile() {
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException ex) {
-                throw new RuntimeException("Could not create file " + file.getName());
-            }
-        }
-        return file;
-    }
-
-    public InputStream read() throws IOException {
-        return new FileInputStream(file);
-    }
-
-    public String name() {
-        return file.getName();
-    }
-
-    public File location() {
-        return file.getParentFile();
+    public String value() {
+        return string.substring(string.indexOf("=") + 1, string.length());
     }
 }

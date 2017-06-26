@@ -46,7 +46,7 @@ public class Application implements ServletContextListener {
         context
             .registerServlet("Page", new PageServlet(context, pages), "/pages/*")
             .registerServlet("LogIn", new LogInServlet(), "/login")
-            .registerServlet("Create page", new CreatePageServlet(context, pages), "/new-page");
+            .registerServlet("Create page", new NewPageServlet(context, pages), "/new-page");
     }
 
     private VelocityEngine velocity() {

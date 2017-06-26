@@ -35,7 +35,7 @@ public class CommonMark {
     private final HtmlRenderer htmlRenderer = HtmlRenderer.builder().build();
     private final Parser parser = Parser.builder().build();
 
-    public String asHTML(String commonmark) {
-        return htmlRenderer.render(parser.parse(commonmark));
+    public String format(String text) {
+        return htmlRenderer.render(parser.parse(text));
     }
 }

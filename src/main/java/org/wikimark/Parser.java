@@ -23,23 +23,51 @@
  */
 package org.wikimark;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Set;
 
 /**
  *
  * @author Martín Straus
  */
-public class MetaFile {
-    
-    private final PropertiesFile properties;
+public class Parser {
 
-    public MetaFile(File file) throws IOException {
-        this.properties = new PropertiesFile(file);
+    private FileReader reader;
+
+    public AST parse(InputStream input) throws IOException {
+        reader = new FileReader(new BufferedReader(new InputStreamReader(input)));
+        return new AST(title(), author(), keywords(), content());
     }
-    
-    public Set<String> keywords() throws IOException {
-        return new SplitString(properties.value("keywords"), ",").values();
+
+    private String title() throws IOException {
+        return nextAttribute("title", "");
     }
+
+    private String author() throws IOException {
+        return nextAttribute("author", "");
+    }
+
+    private Set<String> keywords() throws IOException {
+        return new SplitString(nextAttribute("keywords", ""), ",").values();
+    }
+
+    private String nextAttribute(String prefix, String defaultValue) throws IOException {
+        return reader
+            .nextLineStartingWith(prefix)
+            .map((s) -> new StringProperty(s).value())
+            .orElse(defaultValue);
+    }
+
+    /**
+     * Whatever the reader provides, as is.
+     *
+     * @return
+     */
+    private String content() throws IOException {
+        return reader.remainingContext();
+    }
+
 }

@@ -34,12 +34,36 @@ THE SOFTWARE.
         <div class="container">
             <h1>New page</h1>   
             <form action="${pageContext.request.contextPath}/new-page" method="post">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" oninput="titleChanged()">
+                <label for="name">User-friendly URL</label>
+                <input type="text" id="name" name="name" oninput="nameEdited()">
+                <label for="keywords">Keywords</label>
+                <p class="input-description">A comma-separated list of keywords for this page.</p>
+                <input type="text" id="keywords" name="keywords">
                 <label for="content">Content</label>
+                <p class="input-description">Write the content of the page using <a href="http://commonmark.org" target="_blank">CommonMark</a> syntax.</p>
                 <textarea id="content" rows="10" name="content"></textarea>
                 <button type="submit">Create</button>
             </form>
         </div>
+        <script>
+            var nameWasEdited = false;
+            
+            function titleChanged() {
+                var name = document.getElementById('name');
+                if (name.value === '' || !nameWasEdited) {
+                    name.value = transformTitle(document.getElementById('title').value);
+                }
+            }
+            
+            function transformTitle(title) {
+                return title.replace(' ', '-').toLowerCase();
+            }
+            
+            function nameEdited() {
+                nameWasEdited = true;
+            }
+        </script>
     </body>
 </html>

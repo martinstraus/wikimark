@@ -24,22 +24,56 @@
 package org.wikimark;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import static java.util.Arrays.asList;
+import java.util.HashSet;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.internal.matchers.TypeSafeMatcher;
 
 /**
  *
  * @author Martín Straus
  */
-public class PagesTest {
+public class ParserTest {
 
     @Test
-    public void fileExistsAfterCreation() throws IOException {
-        final Path tempdir = Files.createTempDirectory(".wikimark-it");
-        new Pages(tempdir.toFile(), new DummyTemplate()).create("test.md", "test");
-        assertThat("file for new page exists", tempdir.resolve("test.md").toFile().exists(), is(true));
+    public void parsesValidStreamCorrectly() throws IOException {
+        assertThat(
+            "parsed page",
+            new Parser().parse(
+                new LinesInputStream(
+                    "title=The title",
+                    "author=The author",
+                    "keywords=k1,k2,k3",
+                    "first line",
+                    "second line"
+                ).inputStream()
+            ),
+            is(equalTo(new AST(
+                "The title",
+                "The author",
+                new HashSet<>(asList("k1", "k2", "k3")),
+                new LinesAsString("first line", "second line").toString())
+            ))
+        );
     }
+
+    private Matcher<AST> equalTo(AST page) {
+        return new TypeSafeMatcher<AST>() {
+            @Override
+            public boolean matchesSafely(AST t) {
+                return t.equalTo(page);
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendValue(page);
+            }
+
+        };
+    }
+
 }

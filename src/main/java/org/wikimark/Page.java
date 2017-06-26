@@ -23,10 +23,8 @@
  */
 package org.wikimark;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Set;
+import java.io.InputStream;
 
 /**
  *
@@ -43,26 +41,11 @@ public class Page {
     }
 
     public String asHTML() {
-        final Page page = this;
-        return template.render(new PageContext() {
-            @Override
-            public String content() {
-                try {
-                    return new CommonMark().asHTML(file.read());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-
-            @Override
-            public java.util.List<String> keywords() {
-                try {
-                    return new ArrayList<>(page.keywords());
-                } catch (IOException ex) {
-                    return new ArrayList<>();
-                }
-            }
-        });
+        try (final InputStream input = file.read()) {
+            return template.render(new PageContext(new Parser().parse(input), new CommonMark()));
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public String url() {
@@ -71,14 +54,6 @@ public class Page {
 
     public String urlRelativeToHost(Context context) {
         return context.urlRelativeToHost("/pages/".concat(file.name()));
-    }
-
-    private Set<String> keywords() throws java.io.IOException {
-        return meta().keywords();
-    }
-
-    private MetaFile meta() throws java.io.IOException {
-        return new MetaFile(new File(file.location(), file.name().concat(".meta")));
     }
 
     public Page saveOrUpdate(String content) {

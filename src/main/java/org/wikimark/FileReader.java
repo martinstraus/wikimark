@@ -23,49 +23,40 @@
  */
 package org.wikimark;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Optional;
 
 /**
  *
  * @author Martín Straus
  */
-public class PageFile {
+class FileReader {
 
-    private final File file;
+    private final BufferedReader reader;
 
-    public PageFile(File name) {
-        this.file = name;
+    public FileReader(BufferedReader reader) {
+        this.reader = reader;
     }
 
-    public PageFile saveOrUpdate(String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(newOrExistingFile()))) {
-            writer.write(content);
-            return this;
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+    public Optional<String> nextLineStartingWith(String prefix) throws IOException {
+        String line = reader.readLine();
+        while (line != null && !line.trim().startsWith(prefix)) {
+            line = reader.readLine();
         }
+        return Optional.ofNullable(line != null ? line.trim() : null);
     }
 
-    private File newOrExistingFile() {
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException ex) {
-                throw new RuntimeException("Could not create file " + file.getName());
-            }
+    public String remainingContext() throws IOException {
+        final StringWriter string = new StringWriter();
+        final char[] buffer = new char[1024];
+        try (final PrintWriter writer = new PrintWriter(string)) {
+            int read = reader.read(buffer);
+            writer.write(buffer, 0, read);
         }
-        return file;
+        return string.toString();
     }
 
-    public InputStream read() throws IOException {
-        return new FileInputStream(file);
-    }
-
-    public String name() {
-        return file.getName();
-    }
-
-    public File location() {
-        return file.getParentFile();
-    }
 }

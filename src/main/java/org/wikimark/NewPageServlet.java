@@ -23,49 +23,37 @@
  */
 package org.wikimark;
 
-import java.io.*;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Martín Straus
  */
-public class PageFile {
+public class NewPageServlet extends HttpServlet {
 
-    private final File file;
+    private final Context context;
+    private final Pages pages;
 
-    public PageFile(File name) {
-        this.file = name;
+    public NewPageServlet(Context context, Pages pages) {
+        this.context = context;
+        this.pages = pages;
     }
 
-    public PageFile saveOrUpdate(String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(newOrExistingFile()))) {
-            writer.write(content);
-            return this;
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/pages/new-page.jsp").forward(req, resp);
     }
 
-    private File newOrExistingFile() {
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException ex) {
-                throw new RuntimeException("Could not create file " + file.getName());
-            }
-        }
-        return file;
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        final NewPageForm form = new NewPageForm(req).validate();
+        Page page = pages.create(form.name(), form.content());
+        resp.setStatus(HttpServletResponse.SC_SEE_OTHER);
+        resp.setHeader("location", page.urlRelativeToHost(context));
     }
 
-    public InputStream read() throws IOException {
-        return new FileInputStream(file);
-    }
-
-    public String name() {
-        return file.getName();
-    }
-
-    public File location() {
-        return file.getParentFile();
-    }
 }

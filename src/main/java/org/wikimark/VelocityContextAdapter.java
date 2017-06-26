@@ -23,8 +23,7 @@
  */
 package org.wikimark;
 
-import static java.util.Arrays.asList;
-import java.util.List;
+import org.apache.velocity.VelocityContext;
 
 /**
  *
@@ -32,43 +31,36 @@ import java.util.List;
  */
 public class VelocityContextAdapter implements org.apache.velocity.context.Context {
 
-    private final List<String> keys = asList("page", "keywords");
-    private final PageContext pageContext;
+    private final VelocityContext context;
 
     public VelocityContextAdapter(PageContext pageContext) {
-        this.pageContext = pageContext;
+        context = new VelocityContext();
+        context.put("page", pageContext);
     }
 
     @Override
     public Object put(String string, Object o) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return context.put(string, o);
     }
 
     @Override
     public Object get(String string) {
-        switch (string) {
-            case "page":
-                return pageContext;
-            case "keywords":
-                return pageContext.keywords().toArray();
-            default:
-                return null;
-        }
+        return context.get(string);
     }
 
     @Override
     public boolean containsKey(Object o) {
-        return keys.contains(o);
+        return context.containsKey(o);
     }
 
     @Override
     public Object[] getKeys() {
-        return keys.toArray();
+        return context.getKeys();
     }
 
     @Override
     public Object remove(Object o) {
-        return null;
+        return context.remove(o);
     }
 
 }

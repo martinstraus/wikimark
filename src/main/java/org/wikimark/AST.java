@@ -23,49 +23,53 @@
  */
 package org.wikimark;
 
-import java.io.*;
+import java.util.Set;
 
 /**
+ * Super-simple abstract syntax tree for the parsed page file.
  *
  * @author Martín Straus
  */
-public class PageFile {
+public class AST {
 
-    private final File file;
+    private final String title;
+    private final String author;
+    private final Set<String> keywords;
+    private final String content;
 
-    public PageFile(File name) {
-        this.file = name;
+    public AST(String title, String author, Set<String> keywords, String content) {
+        this.title = title;
+        this.author = author;
+        this.keywords = keywords;
+        this.content = content;
     }
 
-    public PageFile saveOrUpdate(String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(newOrExistingFile()))) {
-            writer.write(content);
-            return this;
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+    public String title() {
+        return title;
     }
 
-    private File newOrExistingFile() {
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException ex) {
-                throw new RuntimeException("Could not create file " + file.getName());
-            }
-        }
-        return file;
+    public String author() {
+        return author;
     }
 
-    public InputStream read() throws IOException {
-        return new FileInputStream(file);
+    public Set<String> keywords() {
+        return keywords;
     }
 
-    public String name() {
-        return file.getName();
+    public String content() {
+        return content;
     }
 
-    public File location() {
-        return file.getParentFile();
+    public boolean equalTo(AST page) {
+        return this.title.equals(page.title)
+            && this.author.equals(page.author)
+            && this.keywords.containsAll(page.keywords) && page.keywords.containsAll(this.keywords)
+            && this.content.equals(page.content);
     }
+
+    @Override
+    public String toString() {
+        return "AST{" + "title=" + title + ", author=" + author + ", keywords=" + keywords + ", content=" + content + '}';
+    }
+
 }

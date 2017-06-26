@@ -23,37 +23,23 @@
  */
 package org.wikimark;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 /**
  *
  * @author Martín Straus
  */
-public class CreatePageServlet extends HttpServlet {
+public class LinesInputStream {
 
-    private final Context context;
-    private final Pages pages;
+    private final String[] lines;
 
-    public CreatePageServlet(Context context, Pages pages) {
-        this.context = context;
-        this.pages = pages;
+    public LinesInputStream(String... lines) {
+        this.lines = lines;
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/pages/new-page.jsp").forward(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final NewPageForm form = new NewPageForm(req).validate();
-        Page page = pages.create(form.name(), form.content());
-        resp.setStatus(HttpServletResponse.SC_SEE_OTHER);
-        resp.setHeader("location", page.urlRelativeToHost(context));
+    public InputStream inputStream() {
+        return new ByteArrayInputStream(new LinesAsString(lines).toString().getBytes());
     }
 
 }

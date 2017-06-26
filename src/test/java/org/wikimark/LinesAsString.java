@@ -23,49 +23,30 @@
  */
 package org.wikimark;
 
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import static java.util.Arrays.asList;
+import java.util.List;
 
 /**
  *
  * @author Martín Straus
  */
-public class PageFile {
+public class LinesAsString {
 
-    private final File file;
+    private final List<String> lines;
 
-    public PageFile(File name) {
-        this.file = name;
+    public LinesAsString(String... lines) {
+        this.lines = asList(lines);
     }
 
-    public PageFile saveOrUpdate(String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(newOrExistingFile()))) {
-            writer.write(content);
-            return this;
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+    @Override
+    public String toString() {
+        final StringWriter string = new StringWriter();
+        try (final PrintWriter writer = new PrintWriter(string)) {
+            lines.forEach((l) -> writer.println(l));
         }
+        return string.toString();
     }
 
-    private File newOrExistingFile() {
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException ex) {
-                throw new RuntimeException("Could not create file " + file.getName());
-            }
-        }
-        return file;
-    }
-
-    public InputStream read() throws IOException {
-        return new FileInputStream(file);
-    }
-
-    public String name() {
-        return file.getName();
-    }
-
-    public File location() {
-        return file.getParentFile();
-    }
 }
