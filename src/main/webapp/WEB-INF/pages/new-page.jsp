@@ -37,7 +37,6 @@ THE SOFTWARE.
                 <label for="title">Title</label>
                 <input type="text" id="title" name="title" oninput="titleChanged()">
                 <label for="name">User-friendly URL</label>
-                <p class="input-description">All spaces will be replaced with dashes. Every other invalid character will be removed.</p>
                 <input type="text" id="name" name="name" oninput="nameEdited()">
                 <label for="keywords">Keywords</label>
                 <p class="input-description">A comma-separated list of keywords for this page.</p>

@@ -33,6 +33,8 @@ THE SOFTWARE.
         <link rel="stylesheet" href="../css/wikimark.css">
     </head>
     <body>
-        ${page.content()}
+        <div class="container">
+            ${page.content()}
+        </div>
     </body>
 </html>
