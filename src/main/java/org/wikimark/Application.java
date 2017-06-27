@@ -24,6 +24,7 @@
 package org.wikimark;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.apache.velocity.app.VelocityEngine;
@@ -40,7 +41,8 @@ public class Application implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         final Pages pages = new Pages(
             new File(System.getProperty("user.home"), ".wikimark"),
-            new VelocityTemplate(velocity(), "org/wikimark/page-template.vsl")
+            new VelocityTemplate(velocity(), "org/wikimark/page-template.vsl"),
+            Charset.forName("UTF-8")
         );
         final Context context = new Context(sce.getServletContext());
         context

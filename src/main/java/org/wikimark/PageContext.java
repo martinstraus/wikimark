@@ -23,36 +23,20 @@
  */
 package org.wikimark;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author Martín Straus
  */
-public class PageContext {
+public interface PageContext {
 
-    private final AST ast;
-    private final CommonMark format;
+    String author();
 
-    public PageContext(AST ast, CommonMark format) {
-        this.ast = ast;
-        this.format = format;
-    }
+    String content();
 
-    public String title() {
-        return ast.title();
-    }
+    List<String> keywords();
 
-    public String author() {
-        return ast.author();
-    }
+    String title();
 
-    public List<String> keywords() {
-        return new ArrayList<>(ast.keywords());
-    }
-
-    public String content() {
-        return format.format(ast.content());
-    }
 }

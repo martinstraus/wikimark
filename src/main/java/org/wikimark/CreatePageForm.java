@@ -23,6 +23,7 @@
  */
 package org.wikimark;
 
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -30,22 +31,31 @@ import javax.servlet.http.HttpServletRequest;
  * @author Martín Straus
  */
 public class CreatePageForm {
+
     private final HttpServletRequest request;
 
     public CreatePageForm(HttpServletRequest request) {
         this.request = request;
     }
-    
+
     public CreatePageForm validate() {
         return this;
     }
-    
+
     public String name() {
         return request.getPathInfo();
     }
-    
+
     public String content() {
         return request.getParameter("content");
     }
-    
+
+    public String title() {
+        return request.getParameter("title");
+    }
+
+    public Set<String> keywords() {
+        return new SplitString(request.getParameter("keywords"), ",").values();
+    }
+
 }

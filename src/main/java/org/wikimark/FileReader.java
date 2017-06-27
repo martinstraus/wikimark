@@ -54,7 +54,10 @@ class FileReader {
         final char[] buffer = new char[1024];
         try (final PrintWriter writer = new PrintWriter(string)) {
             int read = reader.read(buffer);
-            writer.write(buffer, 0, read);
+            while (read > 0) {
+                writer.write(buffer, 0, read);
+                read = reader.read(buffer);
+            }
         }
         return string.toString();
     }

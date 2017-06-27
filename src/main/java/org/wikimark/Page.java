@@ -23,8 +23,10 @@
  */
 package org.wikimark;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -32,32 +34,61 @@ import java.io.InputStream;
  */
 public class Page {
 
-    private final PageFile file;
     private final Template template;
+    private final String name;
+    private final String title;
+    private final String author;
+    private final String content;
+    private final Set<String> keywords;
 
-    public Page(java.io.File file, Template template) {
-        this.file = new org.wikimark.PageFile(file);
+    public Page(Template template, String name, String title, String author, String content, Set<String> keywords) {
         this.template = template;
+        this.name = name;
+        this.title = title;
+        this.author = author;
+        this.content = content;
+        this.keywords = new HashSet<>(keywords);
     }
 
     public String asHTML() {
-        try (final InputStream input = file.read()) {
-            return template.render(new PageContext(new Parser().parse(input), new CommonMark()));
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        return template.render(pageContext());
     }
 
     public String url() {
-        return file.name();
+        return name;
     }
 
     public String urlRelativeToHost(Context context) {
-        return context.urlRelativeToHost("/pages/".concat(file.name()));
+        return context.urlRelativeToHost("/pages/".concat(name));
     }
 
-    public Page saveOrUpdate(String content) {
-        file.saveOrUpdate(content);
+    public Page update(Pages pages) {
+        pages.update(name, title, author, content, keywords);
         return this;
     }
+
+    private PageContext pageContext() {
+        return new PageContext() {
+            @Override
+            public String author() {
+                return author;
+            }
+
+            @Override
+            public String content() {
+                return new CommonMark().format(content);
+            }
+
+            @Override
+            public List<String> keywords() {
+                return new ArrayList<>(keywords);
+            }
+
+            @Override
+            public String title() {
+                return title;
+            }
+        };
+    }
+
 }

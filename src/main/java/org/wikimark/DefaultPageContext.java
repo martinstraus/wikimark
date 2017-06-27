@@ -23,49 +23,40 @@
  */
 package org.wikimark;
 
-import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Martín Straus
  */
-public class PageFile {
+public class DefaultPageContext implements PageContext {
 
-    private final File file;
+    private final AST ast;
+    private final CommonMark format;
 
-    public PageFile(File name) {
-        this.file = name;
+    public DefaultPageContext(AST ast, CommonMark format) {
+        this.ast = ast;
+        this.format = format;
     }
 
-    public PageFile saveOrUpdate(String content) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(newOrExistingFile()))) {
-            writer.write(content);
-            return this;
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+    @Override
+    public String title() {
+        return ast.title();
     }
 
-    private File newOrExistingFile() {
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException ex) {
-                throw new RuntimeException("Could not create file " + file.getName());
-            }
-        }
-        return file;
+    @Override
+    public String author() {
+        return ast.author();
     }
 
-    public InputStream read() throws IOException {
-        return new FileInputStream(file);
+    @Override
+    public List<String> keywords() {
+        return new ArrayList<>(ast.keywords());
     }
 
-    public String name() {
-        return file.getName();
-    }
-
-    public File location() {
-        return file.getParentFile();
+    @Override
+    public String content() {
+        return format.format(ast.content());
     }
 }

@@ -30,5 +30,5 @@ package org.wikimark;
 public interface Template {
 
     String render(PageContext context);
-    
+
 }

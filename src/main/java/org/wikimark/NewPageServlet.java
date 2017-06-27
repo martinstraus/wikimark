@@ -51,7 +51,7 @@ public class NewPageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final NewPageForm form = new NewPageForm(req).validate();
-        Page page = pages.create(form.name(), form.content());
+        Page page = pages.create(form.name(), form.title(), req.getUserPrincipal().getName(), form.content(), form.keywords());
         resp.setStatus(HttpServletResponse.SC_SEE_OTHER);
         resp.setHeader("location", page.urlRelativeToHost(context));
     }

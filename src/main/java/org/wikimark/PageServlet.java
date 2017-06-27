@@ -24,6 +24,7 @@
 package org.wikimark;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +49,8 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
         Optional<Page> page = pages.find(req.getPathInfo());
         if (page.isPresent()) {
             resp.setContentType("text/html");
-            resp.getOutputStream().print(page.get().asHTML());
+            resp.setCharacterEncoding("UTF-8");
+            resp.getOutputStream().write(page.get().asHTML().getBytes(Charset.forName("UTF-8")));
         } else {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -57,7 +59,7 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final CreatePageForm form = new CreatePageForm(req).validate();
-        Page page = pages.create(form.name(), form.content());
+        Page page = pages.create(form.name(), form.title(), req.getUserPrincipal().getName(), form.content(), form.keywords());
         resp.setStatus(HttpServletResponse.SC_SEE_OTHER);
         resp.setHeader("location", page.urlRelativeToHost(context));
     }

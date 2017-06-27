@@ -10,13 +10,16 @@
         <display-name>Edition</display-name>
         <web-resource-collection>
             <web-resource-name>Secure resources</web-resource-name>
-            <description/>
+            <description>Modification of any resource requires the "editor" role.</description>
             <url-pattern>/pages/*</url-pattern>
-            <url-pattern>/new-page.jsp</url-pattern>
-            <url-pattern>/new-page</url-pattern>
             <http-method>PUT</http-method>
             <http-method>POST</http-method>
             <http-method>DELETE</http-method>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>New page</web-resource-name>
+            <description>New page requieres the "editor" role.</description>
+            <url-pattern>/new-page</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
@@ -44,6 +47,6 @@
     </error-page>
     <error-page>
         <error-code>500</error-code>
-        <location>/WEB-INF/errors/500.jsp</location>location>
+        <location>/WEB-INF/errors/500.jsp</location>location&gt;
     </error-page>
 </web-app>

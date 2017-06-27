@@ -24,8 +24,10 @@
 package org.wikimark;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
@@ -39,7 +41,13 @@ public class PagesTest {
     @Test
     public void fileExistsAfterCreation() throws IOException {
         final Path tempdir = Files.createTempDirectory(".wikimark-it");
-        new Pages(tempdir.toFile(), new DummyTemplate()).create("test.md", "test");
+        new Pages(tempdir.toFile(), new DummyTemplate(), Charset.defaultCharset()).create(
+            "test.md",
+            null,
+            null,
+            "test",
+            Collections.EMPTY_SET
+        );
         assertThat("file for new page exists", tempdir.resolve("test.md").toFile().exists(), is(true));
     }
 }

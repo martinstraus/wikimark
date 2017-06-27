@@ -23,6 +23,7 @@
  */
 package org.wikimark;
 
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -41,9 +42,17 @@ public class NewPageForm {
         return this;
     }
 
+    public String title() {
+        return request.getParameter("title");
+    }
+
     public String name() {
         final String name = request.getParameter("name");
         return name.endsWith(".md") ? name : name.concat(".md");
+    }
+
+    public Set<String> keywords() {
+        return new SplitString(request.getParameter("keywords"), ",").values();
     }
 
     public String content() {
