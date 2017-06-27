@@ -27,11 +27,14 @@ THE SOFTWARE.
         <title>Wikimark - 500</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/wikimark.css">
+        <link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet"> 
+        <link rel="stylesheet" href="../css/normalize.css">
+        <link rel="stylesheet" href="../css/skeleton.css">
+        <link rel="stylesheet" href="../css/wikimark.css">
     </head>
     <body>
-        <div class="container error-404">
-            <h1>500 </h1>
+        <div class="container error-500">
+            <h1>500</h1>
             <h1>Worst. Wiki. Ever.</h1>
             <p>An <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#5xx_Server_error"> server error ocurred</a>. 
                 Don't worry. It's not your fault!</p>

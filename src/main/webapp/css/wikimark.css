@@ -3,28 +3,6 @@ body {
     font-family: 'Work Sans', sans-serif;
 }
 
-.container {
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.container form label {
-    width: 100%;
-    text-transform: uppercase;
-}
-
-.container form input, .container form textarea {
-    width: 100%;
-}
-
-.container.error-404 h1{
-    text-align: center;
-    font-size: 5em;
-    text-transform: uppercase;
-    color: #444444;
-}
-
 .error {
     background-color: red;
     color: white;
@@ -34,4 +12,16 @@ body.login h1, body.index h1 {
     text-align: center;
     font-size: 5em;
     text-transform: uppercase;
+}
+
+
+.error-404 h1, .error-500 h1 {
+    text-align: center;
+    font-size: 5em;
+    text-transform: uppercase;
+    color: #444444;
+}
+
+textarea.editor {
+    height: 30em;
 }

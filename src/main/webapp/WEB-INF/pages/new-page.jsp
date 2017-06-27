@@ -28,39 +28,48 @@ THE SOFTWARE.
         <meta name="description" content="A new wiki page">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
         <title>Wikimark - New page</title>
+        <link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet"> 
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/skeleton.css">
         <link rel="stylesheet" href="css/wikimark.css">
     </head>
     <body>
         <div class="container">
             <h1>New page</h1>   
             <form action="${pageContext.request.contextPath}/new-page" method="post">
-                <label for="title">Title</label>
-                <input type="text" id="title" name="title" oninput="titleChanged()">
-                <label for="name">User-friendly URL</label>
-                <input type="text" id="name" name="name" oninput="nameEdited()">
+                <div class="row">
+                    <div class="six columns">
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title" oninput="titleChanged()" class="u-full-width">
+                    </div>
+                    <div class="six columns">
+                        <label for="name">User-friendly URL</label>
+                        <input type="text" id="name" name="name" oninput="nameEdited()" class="u-full-width">
+                    </div>
+                </div>
                 <label for="keywords">Keywords</label>
-                <p class="input-description">A comma-separated list of keywords for this page.</p>
-                <input type="text" id="keywords" name="keywords">
+                <em>A comma-separated list of keywords for this page.</em>
+                <input type="text" id="keywords" name="keywords" class="u-full-width">
                 <label for="content">Content</label>
-                <p class="input-description">Write the content of the page using <a href="http://commonmark.org" target="_blank">CommonMark</a> syntax.</p>
-                <textarea id="content" rows="10" name="content"></textarea>
-                <button type="submit">Create</button>
+                <em>Write the content of the page using <a href="http://commonmark.org" target="_blank">CommonMark</a> syntax.</em>
+                <textarea id="content" name="content" class="u-full-width editor"></textarea>
+                <button type="submit" class="button-primary">Create</button>
             </form>
         </div>
         <script>
             var nameWasEdited = false;
-            
+
             function titleChanged() {
                 var name = document.getElementById('name');
                 if (name.value === '' || !nameWasEdited) {
                     name.value = transformTitle(document.getElementById('title').value);
                 }
             }
-            
+
             function transformTitle(title) {
                 return title.replace(' ', '-').toLowerCase();
             }
-            
+
             function nameEdited() {
                 nameWasEdited = true;
             }
