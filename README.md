@@ -1,8 +1,12 @@
 # wikimark
 
-_wikimark_ is a [wiki](https://en.wikipedia.org/wiki/Wiki) built in Java, in which all pages are written using [CommonMark](http://commonmark.org)
+**wikimark** is a [wiki](https://en.wikipedia.org/wiki/Wiki) built with [Java](http://www.oracle.com/technetwork/java), 
+in which all pages are written using [CommonMark](http://commonmark.org).
+Search is implemented with [Apache Lucece](https://lucene.apache.org). Minimalistic style is provided by
+ [Skeleton](http://getskeleton.com/). You can deploy **wikimark** in any [JEE](http://www.oracle.com/technetwork/java/javaee)
+ container, although for the time being it's been officially tested only in [Apache Tomcat](http://tomcat.apache.org/).
 
-## Building
+## Building from source
 
 Clone the repository and build with [Gradle](https://gradle.org/)
 
@@ -10,7 +14,7 @@ Clone the repository and build with [Gradle](https://gradle.org/)
 
 ## Running
 
-Deploy ```build\wikimark.war``` on your container of choice. The root directory for wiki pages is 
+Deploy ```build/wikimark.war``` on your container of choice. The root directory for wiki pages is 
 ```${user.home}/.wikimark```.
 
 ## File format
@@ -29,5 +33,4 @@ Example:
     keywords=java,wiki,commonmark
     #Wikimark
     This is the content of a sample page
-
 
