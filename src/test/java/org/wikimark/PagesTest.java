@@ -28,7 +28,9 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
+import org.apache.lucene.queryparser.classic.ParseException;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
@@ -39,15 +41,19 @@ import org.junit.Test;
 public class PagesTest {
 
     @Test
-    public void fileExistsAfterCreation() throws IOException {
+    public void fileExistsAfterCreation() throws IOException, ParseException {
         final Path tempdir = Files.createTempDirectory(".wikimark-it");
-        new Pages(tempdir.toFile(), new DummyTemplate(), Charset.defaultCharset()).create(
-            "test.md",
-            null,
-            null,
-            "test",
-            Collections.EMPTY_SET
-        );
+        final Pages pages = new Pages(tempdir.toFile(), new DummyTemplate(), new DummyTemplate(), Charset.defaultCharset());
+        pages.create("test.md", "", "", "test", Collections.EMPTY_SET);
         assertThat("file for new page exists", tempdir.resolve("test.md").toFile().exists(), is(true));
+    }
+
+    @Test
+    public void allReturnsAllCreatedPages() throws IOException, ParseException {
+        final Path tempdir = Files.createTempDirectory(".wikimark-it");
+        final Pages pages = new Pages(tempdir.toFile(), new DummyTemplate(), new DummyTemplate(), Charset.defaultCharset());
+        pages.create("p1.md", "Page 1", "Author", "content", Collections.EMPTY_SET);
+        pages.create("p2.md", "Page 2", "Author", "content", Collections.EMPTY_SET);
+        assertThat("all pages", pages.all(), hasSize(2));
     }
 }

@@ -1,0 +1,4 @@
+<p class="result page">
+    <a href="${pageURL}">${page.title()}</a>
+    <span class="author">by $page.author()</span>
+</p>

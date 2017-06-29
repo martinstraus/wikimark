@@ -29,6 +29,7 @@ import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.velocity.VelocityContext;
 
 /**
  *
@@ -38,14 +39,30 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
 
     private final Context context;
     private final Pages pages;
+    private final org.apache.velocity.Template searchResultPageTemplate;
 
-    public PageServlet(Context context, Pages pages) {
+    public PageServlet(Context context, Pages pages, org.apache.velocity.Template searchResultPageTemplate) {
         this.context = context;
         this.pages = pages;
+        this.searchResultPageTemplate = searchResultPageTemplate;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (req.getPathInfo() == null) {
+            search(req, resp);
+        } else {
+            findOne(req, resp);
+        }
+    }
+
+    private void search(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        final VelocityContext vc = new VelocityContext();
+        vc.put("found", pages.findByTerms(req.getParameter("query"), 20));
+        searchResultPageTemplate.merge(vc, resp.getWriter());
+    }
+
+    private void findOne(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Optional<Page> page = pages.find(req.getPathInfo());
         if (page.isPresent()) {
             resp.setContentType("text/html");

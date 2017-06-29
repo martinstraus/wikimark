@@ -39,4 +39,6 @@ public interface PageContext {
 
     String title();
 
+    String url(Context appContext);
+
 }

@@ -33,9 +33,11 @@ public class VelocityContextAdapter implements org.apache.velocity.context.Conte
 
     private final VelocityContext context;
 
-    public VelocityContextAdapter(PageContext pageContext) {
+    public VelocityContextAdapter(PageContext pageContext, Context appContext) {
         context = new VelocityContext();
         context.put("page", pageContext);
+        context.put("context", appContext);
+        context.put("pageURL", pageContext.url(appContext));
     }
 
     @Override

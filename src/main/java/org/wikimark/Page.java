@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
 
 /**
  *
@@ -35,14 +38,16 @@ import java.util.Set;
 public class Page {
 
     private final Template template;
+    private final Template abstractTemplate;
     private final String name;
     private final String title;
     private final String author;
     private final String content;
     private final Set<String> keywords;
 
-    public Page(Template template, String name, String title, String author, String content, Set<String> keywords) {
+    public Page(Template template, Template abstractTemplate, String name, String title, String author, String content, Set<String> keywords) {
         this.template = template;
+        this.abstractTemplate = abstractTemplate;
         this.name = name;
         this.title = title;
         this.author = author;
@@ -52,6 +57,20 @@ public class Page {
 
     public String asHTML() {
         return template.render(pageContext());
+    }
+
+    public String abstractAsHTML() {
+        return abstractTemplate.render(pageContext());
+    }
+
+    public Document asLuceneDocument() {
+        final Document document = new Document();
+        document.add(new Field("name", name, TextField.TYPE_STORED));
+        document.add(new Field("title", title, TextField.TYPE_STORED));
+        document.add(new Field("author", author, TextField.TYPE_STORED));
+        keywords.forEach((k) -> document.add(new Field("keyword", k, TextField.TYPE_STORED)));
+        document.add(new Field("content", content, TextField.TYPE_STORED));
+        return document;
     }
 
     public String url() {
@@ -88,6 +107,12 @@ public class Page {
             public String title() {
                 return title;
             }
+
+            @Override
+            public String url(Context appContext) {
+                return urlRelativeToHost(appContext);
+            }
+
         };
     }
 

@@ -13,21 +13,16 @@
     <body class="index">
         <div class="container">
             <h1>Wikimark</h1>
-            <c:if test="${not empty mensaje}">
-                <p class="error">${mensaje}</p>
+            <form action="${pageContext.request.contextPath}/pages" method="get">
+                <input type="text" name="query" class="u-full-width">
+                <button type="submit" class="button-primary">Search</button>
+            </form>
+            <c:if test="${empty pageContext.request.userPrincipal}">
+                You can <a href="login.jsp">log in</a> if you have an account.
             </c:if>
             <c:if test="${not empty pageContext.request.userPrincipal}">
                 <p>Welcome, <%= ((javax.servlet.http.HttpServletRequest) pageContext.getRequest()).getUserPrincipal().getName() %>.</p>
                 <p>You can <a href="new-page">create a new page</a>.</p>
-            </c:if>
-            <c:if test="${empty pageContext.request.userPrincipal}">
-                <form action="${pageContext.request.contextPath}/login" method="post">
-                    <label for="j_username">Username</label>
-                    <input type="text" id="j_username" name="j_username" class="u-full-width">
-                    <label for="j_password">Password</label>
-                    <input type="password" id="j_password" name="j_password" class="u-full-width" >
-                    <button class="button-primary">Log in</button>
-                </form>
             </c:if>
         </div>
     </body>

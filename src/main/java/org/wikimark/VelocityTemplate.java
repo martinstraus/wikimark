@@ -35,16 +35,18 @@ public class VelocityTemplate implements Template {
 
     private final VelocityEngine engine;
     private final String template;
+    private final Context appContext;
 
-    public VelocityTemplate(VelocityEngine engine, String template) {
+    public VelocityTemplate(VelocityEngine engine, String template, Context appContext) {
         this.engine = engine;
         this.template = template;
+        this.appContext = appContext;
     }
 
     @Override
     public String render(PageContext context) {
         try (final StringWriter writer = new StringWriter()) {
-            engine.getTemplate(template).merge(new VelocityContextAdapter(context), writer);
+            engine.getTemplate(template).merge(new VelocityContextAdapter(context, appContext), writer);
             writer.flush();
             return writer.toString();
         } catch (IOException ex) {

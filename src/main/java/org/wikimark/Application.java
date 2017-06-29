@@ -24,6 +24,7 @@
 package org.wikimark;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -39,16 +40,26 @@ public class Application implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        final Pages pages = new Pages(
-            new File(System.getProperty("user.home"), ".wikimark"),
-            new VelocityTemplate(velocity(), "org/wikimark/page-template.vsl"),
-            Charset.forName("UTF-8")
-        );
-        final Context context = new Context(sce.getServletContext());
-        context
-            .registerServlet("Page", new PageServlet(context, pages), "/pages/*")
-            .registerServlet("LogIn", new LogInServlet(), "/login")
-            .registerServlet("Create page", new NewPageServlet(context, pages), "/new-page");
+        try {
+            final Context context = new Context(sce.getServletContext());
+            final VelocityEngine velocity = velocity();
+            final Pages pages = new Pages(
+                new File(System.getProperty("user.home"), ".wikimark"),
+                new VelocityTemplate(velocity, "org/wikimark/page-template.vsl", context),
+                new VelocityTemplate(velocity, "org/wikimark/page-abstract.vsl", context),
+                Charset.forName("UTF-8")
+            );
+            context
+                .registerServlet(
+                    "Page",
+                    new PageServlet(context, pages, velocity.getTemplate("org/wikimark/search-result.vsl")),
+                    "/pages/*"
+                )
+                .registerServlet("LogIn", new LogInServlet(), "/login")
+                .registerServlet("Create page", new NewPageServlet(context, pages), "/new-page");
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     private VelocityEngine velocity() {

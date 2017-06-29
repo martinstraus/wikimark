@@ -8,12 +8,16 @@ body {
     color: white;
 }
 
-body.login h1, body.index h1 {
+body.login h1, body.index h1, body.search-results h1 {
     text-align: center;
     font-size: 5em;
     text-transform: uppercase;
 }
 
+body.login h2, body.index h2, body.search-results h2 {
+    text-align: center;
+    font-size: 3em;
+}
 
 .error-404 h1, .error-500 h1 {
     text-align: center;
