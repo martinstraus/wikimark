@@ -37,6 +37,7 @@ import org.apache.lucene.analysis.standard.*;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.*;
 import org.apache.lucene.index.*;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.store.*;
@@ -111,7 +112,10 @@ public class Index implements Closeable {
     }
 
     private Query queryFromText(String queryText) throws ParseException {
-        return new QueryParser("content", analyzer).parse(queryText);
+        return new MultiFieldQueryParser(
+            new String[]{"name", "author", "title", "keywords", "content"},
+            analyzer
+        ).parse(queryText);
     }
 
     @Override
