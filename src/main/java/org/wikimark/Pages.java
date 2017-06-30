@@ -31,6 +31,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -69,7 +70,16 @@ public class Pages {
     private Page loadPageFrom(File file, String name) {
         try (FileInputStream input = new FileInputStream(file)) {
             final AST ast = new Parser().parse(input);
-            return new Page(template, abstractTemplate, name, ast.title(), ast.author(), ast.content(), ast.keywords());
+            return new Page(
+                template,
+                abstractTemplate,
+                name,
+                ast.title(),
+                ast.author(),
+                ast.content(),
+                ast.keywords(),
+                Files.readAttributes(file.toPath(), BasicFileAttributes.class).creationTime().toInstant()
+            );
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -77,8 +87,18 @@ public class Pages {
 
     public Page create(String name, String title, String author, String content, Set<String> keywords) {
         try {
-            saveToFile(new java.io.File(root, name), title, author, content, keywords);
-            final Page page = new Page(template, abstractTemplate, name, title, author, content, keywords);
+            final File file = new java.io.File(root, name);
+            saveToFile(file, title, author, content, keywords);
+            final Page page = new Page(
+                template,
+                abstractTemplate,
+                name,
+                title,
+                author,
+                content,
+                keywords,
+                Files.readAttributes(file.toPath(), BasicFileAttributes.class).creationTime().toInstant()
+            );
             index.index(page);
             return page;
         } catch (IOException ex) {

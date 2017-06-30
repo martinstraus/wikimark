@@ -23,6 +23,7 @@
  */
 package org.wikimark;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -44,8 +45,9 @@ public class Page {
     private final String author;
     private final String content;
     private final Set<String> keywords;
+    private final Instant creationTime;
 
-    public Page(Template template, Template abstractTemplate, String name, String title, String author, String content, Set<String> keywords) {
+    public Page(Template template, Template abstractTemplate, String name, String title, String author, String content, Set<String> keywords, Instant creationTime) {
         this.template = template;
         this.abstractTemplate = abstractTemplate;
         this.name = name;
@@ -53,6 +55,7 @@ public class Page {
         this.author = author;
         this.content = content;
         this.keywords = new HashSet<>(keywords);
+        this.creationTime = creationTime;
     }
 
     public String asHTML() {
@@ -111,6 +114,10 @@ public class Page {
             @Override
             public String url(Context appContext) {
                 return urlRelativeToHost(appContext);
+            }
+
+            public Instant creationTime() {
+                return creationTime;
             }
 
         };

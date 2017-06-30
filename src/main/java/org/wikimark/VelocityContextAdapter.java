@@ -23,6 +23,10 @@
  */
 package org.wikimark;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import org.apache.velocity.VelocityContext;
 
 /**
@@ -30,6 +34,15 @@ import org.apache.velocity.VelocityContext;
  * @author Martín Straus
  */
 public class VelocityContextAdapter implements org.apache.velocity.context.Context {
+    
+    public static class Dates {
+        public String format(Instant instant) {
+            return DateTimeFormatter
+                .ofLocalizedDateTime(FormatStyle.FULL)
+                .withZone(ZoneId.systemDefault())
+                .format(instant);
+        }
+    }
 
     private final VelocityContext context;
 
@@ -38,6 +51,7 @@ public class VelocityContextAdapter implements org.apache.velocity.context.Conte
         context.put("page", pageContext);
         context.put("context", appContext);
         context.put("pageURL", pageContext.url(appContext));
+        context.put("dates", new Dates());
     }
 
     @Override

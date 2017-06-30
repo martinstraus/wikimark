@@ -23,6 +23,7 @@
  */
 package org.wikimark;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -40,5 +41,7 @@ public interface PageContext {
     String title();
 
     String url(Context appContext);
+    
+    Instant creationTime();
 
 }
