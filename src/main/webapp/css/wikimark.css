@@ -52,4 +52,13 @@ blockquote {
 
 body.page header {
     text-align: right;
+
+}
+div.panel {
+    padding: 5px;
+}
+
+div.panel.with-border {
+    border: 1px solid #E1E1E1;
+    border-radius: 4px;
 }

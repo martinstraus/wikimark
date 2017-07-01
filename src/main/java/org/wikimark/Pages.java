@@ -38,6 +38,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 /**
@@ -145,16 +146,26 @@ public class Pages {
 
     public List<Page> findByTerms(String query, int maxResults) {
         try {
-            return index
-                .search(query, maxResults)
-                .stream()
-                .map((doc) -> find(doc.get("name")))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(toList());
+            return collectPages(index.search(query, maxResults));
         } catch (IOException | ParseException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public List<Page> findLatest(int maxResults) {
+        try {
+            return collectPages(index.latest(maxResults));
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private List<Page> collectPages(List<Document> documents) {
+        return documents.stream()
+            .map((doc) -> find(doc.get("name")))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(toList());
     }
 
 }

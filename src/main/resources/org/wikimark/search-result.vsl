@@ -37,9 +37,13 @@ THE SOFTWARE.
         <div class="container">
             <h1>Wikimark</h1>
             <h2>Search result</h2>
+            <ol class="search-results">
             #foreach ( $result in $found ) 
+                <li>
                 ${result.abstractAsHTML()}
+                </li>
             #end
+            </ol>
         </div>
     </body>
 </html>

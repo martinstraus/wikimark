@@ -28,8 +28,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.NumericDocValuesField;
+import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 
 /**
@@ -73,6 +76,12 @@ public class Page {
         document.add(new Field("author", author, TextField.TYPE_STORED));
         keywords.forEach((k) -> document.add(new Field("keyword", k, TextField.TYPE_STORED)));
         document.add(new Field("content", content, TextField.TYPE_STORED));
+        document.add(new Field(
+            "creationDate",
+            DateTools.timeToString(creationTime.getEpochSecond(), DateTools.Resolution.MINUTE),
+            StringField.TYPE_STORED
+        ));
+        document.add(new NumericDocValuesField("creationDate", creationTime.getEpochSecond()));
         return document;
     }
 

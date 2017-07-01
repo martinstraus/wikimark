@@ -56,7 +56,8 @@ public class Application implements ServletContextListener {
                     "/pages/*"
                 )
                 .registerServlet("LogIn", new LogInServlet(), "/login")
-                .registerServlet("Create page", new NewPageServlet(context, pages), "/new-page");
+                .registerServlet("Create page", new NewPageServlet(context, pages), "/new-page")
+                .registerServlet("index", new IndexServlet(pages), "/index.html");
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

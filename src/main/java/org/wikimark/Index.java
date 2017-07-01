@@ -39,7 +39,6 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.index.*;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.store.*;
 
 /**
@@ -121,6 +120,27 @@ public class Index implements Closeable {
     @Override
     public void close() throws IOException {
         directory.close();
+    }
+
+    public List<Document> latest(int maxResults) throws IOException {
+        try (DirectoryReader ireader = DirectoryReader.open(directory)) {
+            final IndexSearcher searcher = new IndexSearcher(ireader);
+            return collectDocuments(
+                searcher,
+                searcher.search(
+                    new MatchAllDocsQuery(),
+                    maxResults,
+                    new Sort(SortField.FIELD_SCORE, new SortField("creationDate", SortField.Type.DOUBLE, true))
+                )
+            );
+        }
+    }
+
+    private List<Document> collectDocuments(final IndexSearcher searcher, final TopFieldDocs foundDocs) {
+        return asList(foundDocs.scoreDocs)
+            .stream()
+            .map((scoreDoc) -> documentForScore(searcher, scoreDoc))
+            .collect(toList());
     }
 
 }
