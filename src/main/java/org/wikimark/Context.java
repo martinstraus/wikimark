@@ -23,8 +23,10 @@
  */
 package org.wikimark;
 
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRegistration;
 
 /**
  *
@@ -39,8 +41,15 @@ public class Context {
     }
 
     public Context registerServlet(String name, Servlet servlet, String... mappings) {
-        context.addServlet(name, servlet);
-        context.getServletRegistration(name).addMapping(mappings);
+        return this.registerServlet(name, servlet, null, mappings);
+    }
+
+    public Context registerServlet(String name, Servlet servlet, MultipartConfigElement multipartConfig, String... mappings) {
+        final ServletRegistration.Dynamic registration = context.addServlet(name, servlet);
+        if (multipartConfig != null) {
+            registration.setMultipartConfig(multipartConfig);
+        }
+        registration.addMapping(mappings);
         return this;
     }
 

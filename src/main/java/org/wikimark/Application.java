@@ -26,6 +26,7 @@ package org.wikimark;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.apache.velocity.app.VelocityEngine;
@@ -43,12 +44,19 @@ public class Application implements ServletContextListener {
         try {
             final Context context = new Context(sce.getServletContext());
             final VelocityEngine velocity = velocity();
+            final File root = new File(System.getProperty("user.home"), ".wikimark");
+            
+            if (!root.exists()) {
+                root.mkdir();
+            }
+            
             final Pages pages = new Pages(
-                new File(System.getProperty("user.home"), ".wikimark"),
+                new File(root, "pages"),
                 new VelocityTemplate(velocity, "org/wikimark/page-template.vsl", context),
                 new VelocityTemplate(velocity, "org/wikimark/page-abstract.vsl", context),
                 Charset.forName("UTF-8")
             );
+            
             context
                 .registerServlet(
                     "Page",
@@ -57,7 +65,14 @@ public class Application implements ServletContextListener {
                 )
                 .registerServlet("LogIn", new LogInServlet(), "/login")
                 .registerServlet("Create page", new NewPageServlet(context, pages), "/new-page")
-                .registerServlet("index", new IndexServlet(pages), "/index.html");
+                .registerServlet("index", new IndexServlet(pages), "/index.html")
+                .registerServlet(
+                    "Attachments", 
+                    new AttachmentServlet(new File(root, "attachments").toPath()), 
+                    new MultipartConfigElement(new File(root, "attachments").getAbsolutePath()),
+                    "/attachments/*"
+                );
+
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

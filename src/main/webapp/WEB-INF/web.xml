@@ -21,6 +21,11 @@
             <description>New page requieres the "editor" role.</description>
             <url-pattern>/new-page</url-pattern>
         </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Attachments</web-resource-name>
+            <description>Attachments pages (but not attached files) require the "editor" role.</description>
+            <url-pattern>/attachments</url-pattern>
+        </web-resource-collection>
         <auth-constraint>
             <description/>
             <role-name>editor</role-name>
