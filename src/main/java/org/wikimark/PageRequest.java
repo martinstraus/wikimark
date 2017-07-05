@@ -23,40 +23,29 @@
  */
 package org.wikimark;
 
-import java.util.Set;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Martín Straus
  */
-final class EditPageForm {
+public class PageRequest {
 
-    private final HttpServletRequest request;
     private final Pages pages;
+    private final HttpServletRequest request;
 
-    public EditPageForm(HttpServletRequest request, Pages pages) {
+    public PageRequest(Pages pages, HttpServletRequest request) {
         this.request = request;
         this.pages = pages;
     }
 
-    public Page edit(HttpServletResponse resp) {
-        final Page page = new PageRequest(pages, request).page().orElseThrow(() -> new IllegalArgumentException());
-        page.update(pages, title(), content(), keywords());
-        return page;
+    public Optional<Page> page() {
+        return pages.find(pageName());
     }
 
-    private String title() {
-        return request.getParameter("title");
-    }
-
-    private String content() {
-        return request.getParameter("content");
-    }
-
-    private Set<String> keywords() {
-        return new Keywords().fromString(request.getParameter("keywords"));
+    private String pageName() {
+        return request.getPathInfo().substring(1, request.getPathInfo().length());
     }
 
 }

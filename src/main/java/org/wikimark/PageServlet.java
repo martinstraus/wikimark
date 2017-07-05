@@ -69,23 +69,24 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void findOne(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Optional<Page> page = pages.find(req.getPathInfo());
+        Optional<Page> page = new PageRequest(pages, req).page();
         if (page.isPresent()) {
             resp.setContentType("text/html");
             resp.setCharacterEncoding("UTF-8");
             resp.getOutputStream().write(page.get().asHTML().getBytes(Charset.forName("UTF-8")));
         } else {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            new Response(resp).notFound();
         }
     }
 
     private void showEdit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         final Optional<Page> page = new ShowEditRequest(req, pages).page();
         if (!page.isPresent()) {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+            new Response(resp).notFound();
         } else {
-            req.setAttribute("page", page.get().pageContext());
-            req.getRequestDispatcher("/WEB-INF/pages/edit-page.jsp").forward(req, resp);
+            new Request(req)
+                .withAttribute("page", page.get().pageContext())
+                .forwardTo("/WEB-INF/pages/edit-page.jsp", resp);
         }
     }
 

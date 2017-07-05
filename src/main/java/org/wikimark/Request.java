@@ -23,7 +23,10 @@
  */
 package org.wikimark;
 
+import java.io.IOException;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -39,6 +42,16 @@ public class Request {
 
     public String parameter(String parameter, String defaultValue) {
         return request.getParameter(parameter) != null ? request.getParameter(parameter) : defaultValue;
+    }
+    
+    public Request withAttribute(String name, Object value) {
+        request.setAttribute(name, value);
+        return this;
+    }
+
+    public Request forwardTo(String url, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher(url).forward(request, response);
+        return this;
     }
 
 }
