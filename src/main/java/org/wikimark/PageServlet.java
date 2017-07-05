@@ -71,9 +71,10 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
     private void findOne(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Optional<Page> page = new PageRequest(pages, req).page();
         if (page.isPresent()) {
-            resp.setContentType("text/html");
-            resp.setCharacterEncoding("UTF-8");
-            resp.getOutputStream().write(page.get().asHTML().getBytes(Charset.forName("UTF-8")));
+            new Response(resp)
+                .withContentOfType("text/html")
+                .encodedWithCharacterSet("UTF-8")
+                .readContentFrom(page.get().asHTML().getBytes(Charset.forName("UTF-8")));
         } else {
             new Response(resp).notFound();
         }

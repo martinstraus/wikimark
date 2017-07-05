@@ -24,6 +24,7 @@
 package org.wikimark;
 
 import java.io.IOException;
+import java.io.InputStream;
 import javax.servlet.http.HttpServletResponse;
 import static javax.servlet.http.HttpServletResponse.*;
 
@@ -32,19 +33,19 @@ import static javax.servlet.http.HttpServletResponse.*;
  * @author Martín Straus
  */
 public class Response {
-    
+
     private final HttpServletResponse response;
-    
+
     public Response(HttpServletResponse response) {
         this.response = response;
     }
-    
+
     public Response redirectTo(String url) {
         response.setStatus(SC_SEE_OTHER);
         response.setHeader("location", url);
         return this;
     }
-    
+
     public Response notFound() throws IOException {
         response.sendError(SC_NOT_FOUND);
         return this;
@@ -52,6 +53,21 @@ public class Response {
 
     public Response badRequest() throws IOException {
         response.sendError(SC_BAD_REQUEST);
+        return this;
+    }
+
+    public Response withContentOfType(String contentType) {
+        response.setContentType(contentType);
+        return this;
+    }
+
+    public Response encodedWithCharacterSet(String characterSet) {
+        response.setCharacterEncoding("UTF-8");
+        return this;
+    }
+
+    public Response readContentFrom(byte[] bytes) throws IOException {
+        response.getOutputStream().write(bytes);
         return this;
     }
 }
