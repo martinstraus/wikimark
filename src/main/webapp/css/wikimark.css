@@ -38,18 +38,6 @@ blockquote {
     font-style: italic;
 }
 
-.tag {
-    background-color: #039FD3; /* Generated with http://paletton.com/#uid=13p0u0kqbVZeCY5kNX2vWTRPAMi */
-    color: #ffffff;
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-.tag a {
-    color: #ffffff;
-    text-decoration: none;
-}
-
 body.page header {
     text-align: right;
 
@@ -61,4 +49,21 @@ div.panel {
 div.panel.with-border {
     border: 1px solid #E1E1E1;
     border-radius: 4px;
+}
+
+ul.tags li {
+    display: inline;
+    color: #ffffff;
+    border-radius: 3px;
+    background-color: #039FD3; /* Generated with http://paletton.com/#uid=13p0u0kqbVZeCY5kNX2vWTRPAMi */
+    box-sizing: border-box;
+    padding-left: 5px;
+    padding-right: 5px;
+    cursor: pointer;
+}
+
+ul.tags li a {
+    color: #ffffff;
+    text-decoration: none;
+    white-space: nowrap;
 }
