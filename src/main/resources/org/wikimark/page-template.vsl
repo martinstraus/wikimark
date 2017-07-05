@@ -38,12 +38,15 @@ THE SOFTWARE.
     <body class="page">
         <header>
             <div class="container">
-                <p>Created by <a href="../pages?query=${page.author()}">${page.author()}</a> on ${dates.format(${page.creationTime()})}</p>
-                <ul class="tags">
-                #foreach ( $keyword in ${page.keywords()} ) 
-                    <li><a href="../pages?query=$keyword">$keyword</a></li>
-                #end
-                <ul>
+                <h1>${page.title()}</h1>
+                <div class="page-info">
+                    <p>Created by <a href="../pages?query=${page.author()}">${page.author()}</a> on ${dates.format(${page.creationTime()})}</p>
+                    <ul class="tags">
+                    #foreach ( $keyword in ${page.keywords()} ) 
+                        <li><a href="../pages?query=$keyword">$keyword</a></li>
+                    #end
+                    <ul>
+                </div>
             </div>
         </header>
         <div class="container">

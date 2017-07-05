@@ -38,10 +38,10 @@ blockquote {
     font-style: italic;
 }
 
-body.page header {
+body.page header .page-info {
     text-align: right;
-
 }
+
 div.panel {
     padding: 5px;
 }
