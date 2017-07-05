@@ -23,29 +23,22 @@
  */
 package org.wikimark;
 
-import java.time.Instant;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author Martín Straus
  */
-public interface PageContext {
-    
-    String name();
+public class Request {
 
-    String author();
+    private final HttpServletRequest request;
 
-    String content();
+    public Request(HttpServletRequest request) {
+        this.request = request;
+    }
 
-    List<String> keywords();
-
-    String title();
-
-    String url(Context appContext);
-
-    Instant creationTime();
-
-    String rawContent();
+    public String parameter(String parameter, String defaultValue) {
+        return request.getParameter(parameter) != null ? request.getParameter(parameter) : defaultValue;
+    }
 
 }

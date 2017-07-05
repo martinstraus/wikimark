@@ -38,10 +38,6 @@ public class CreatePageForm {
         this.request = request;
     }
 
-    public CreatePageForm validate() {
-        return this;
-    }
-
     public String name() {
         return request.getPathInfo();
     }
@@ -55,7 +51,14 @@ public class CreatePageForm {
     }
 
     public Set<String> keywords() {
-        return new SplitString(request.getParameter("keywords"), ",").values();
+        return new Keywords().fromString(request.getParameter("keywords"));
     }
 
+    private String author() {
+        return request.getUserPrincipal().getName();
+    }
+
+    public Page create(Pages pages) {
+        return pages.create(name(), title(), author(), content(), keywords());
+    }
 }

@@ -23,29 +23,24 @@
  */
 package org.wikimark;
 
-import java.time.Instant;
-import java.util.List;
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author Martín Straus
  */
-public interface PageContext {
-    
-    String name();
+public class Keywords {
 
-    String author();
+    private static final String SEPARATOR = ",";
 
-    String content();
+    public Set<String> fromString(String value) {
+        return new SplitString(value, SEPARATOR).values();
+    }
 
-    List<String> keywords();
-
-    String title();
-
-    String url(Context appContext);
-
-    Instant creationTime();
-
-    String rawContent();
+    public String toString(Collection<String> values) {
+        return values.stream().collect(Collectors.joining(SEPARATOR));
+    }
 
 }

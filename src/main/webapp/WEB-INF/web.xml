@@ -6,6 +6,12 @@
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
+    <jsp-config>
+        <taglib>
+            <taglib-uri>/WEB-INF/tld/wikimark</taglib-uri>
+            <taglib-location>/WEB-INF/tld/wikimark.tld</taglib-location>
+        </taglib>
+    </jsp-config>
     <security-constraint>
         <display-name>Edition</display-name>
         <web-resource-collection>
@@ -25,6 +31,11 @@
             <web-resource-name>Attachments</web-resource-name>
             <description>Attachments pages (but not attached files) require the "editor" role.</description>
             <url-pattern>/attachments</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Edit page</web-resource-name>
+            <description/>
+            <url-pattern>/pages/*/edit</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>

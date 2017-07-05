@@ -23,29 +23,35 @@
  */
 package org.wikimark;
 
-import java.time.Instant;
-import java.util.List;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import static javax.servlet.http.HttpServletResponse.*;
 
 /**
  *
  * @author Martín Straus
  */
-public interface PageContext {
+public class Response {
     
-    String name();
+    private final HttpServletResponse response;
+    
+    public Response(HttpServletResponse response) {
+        this.response = response;
+    }
+    
+    public Response redirectTo(String url) {
+        response.setStatus(SC_SEE_OTHER);
+        response.setHeader("location", url);
+        return this;
+    }
+    
+    public Response notFound() throws IOException {
+        response.sendError(SC_NOT_FOUND);
+        return this;
+    }
 
-    String author();
-
-    String content();
-
-    List<String> keywords();
-
-    String title();
-
-    String url(Context appContext);
-
-    Instant creationTime();
-
-    String rawContent();
-
+    public Response badRequest() throws IOException {
+        response.sendError(SC_BAD_REQUEST);
+        return this;
+    }
 }

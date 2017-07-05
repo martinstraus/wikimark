@@ -98,8 +98,19 @@ public class Page {
         return this;
     }
 
-    private PageContext pageContext() {
+    public PageContext pageContext() {
         return new PageContext() {
+
+            @Override
+            public String name() {
+                return name;
+            }
+
+            @Override
+            public String title() {
+                return title;
+            }
+
             @Override
             public String author() {
                 return author;
@@ -111,13 +122,13 @@ public class Page {
             }
 
             @Override
-            public List<String> keywords() {
-                return new ArrayList<>(keywords);
+            public String rawContent() {
+                return content;
             }
 
             @Override
-            public String title() {
-                return title;
+            public List<String> keywords() {
+                return new ArrayList<>(keywords);
             }
 
             @Override
@@ -130,6 +141,11 @@ public class Page {
             }
 
         };
+    }
+
+    public Page update(Pages pages, String title, String content, Set<String> keywords) {
+        pages.update(name, title, author, content, keywords);
+        return this;
     }
 
 }

@@ -37,6 +37,10 @@ import org.apache.velocity.VelocityContext;
  */
 public class PageServlet extends javax.servlet.http.HttpServlet {
 
+    public static String pageName(HttpServletRequest request) {
+        return request.getPathInfo().substring(1, request.getPathInfo().length());
+    }
+
     private final Context context;
     private final Pages pages;
     private final org.apache.velocity.Template searchResultPageTemplate;
@@ -51,6 +55,8 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getPathInfo() == null) {
             search(req, resp);
+        } else if (req.getPathInfo().endsWith("/edit")) {
+            showEdit(req, resp);
         } else {
             findOne(req, resp);
         }
@@ -73,12 +79,42 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
         }
     }
 
+    private void showEdit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        final Optional<Page> page = new ShowEditRequest(req, pages).page();
+        if (!page.isPresent()) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            req.setAttribute("page", page.get().pageContext());
+            req.getRequestDispatcher("/WEB-INF/pages/edit-page.jsp").forward(req, resp);
+        }
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final CreatePageForm form = new CreatePageForm(req).validate();
-        Page page = pages.create(form.name(), form.title(), req.getUserPrincipal().getName(), form.content(), form.keywords());
-        resp.setStatus(HttpServletResponse.SC_SEE_OTHER);
-        resp.setHeader("location", page.urlRelativeToHost(context));
+        switch (new Request(req).parameter("_method", "post")) {
+            case "post":
+                create(req, resp);
+                break;
+            case "put":
+                edit(req, resp);
+                break;
+            default:
+                new Response(resp).badRequest();
+        }
+    }
+
+    private void create(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        final Page page = new CreatePageForm(req).create(pages);
+        new Response(resp).redirectTo(page.urlRelativeToHost(context));
+    }
+
+    private void edit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            final Page page = new EditPageForm(req, pages).edit(resp);
+            new Response(resp).redirectTo(page.urlRelativeToHost(context));
+        } catch (IllegalArgumentException ex) {
+            new Response(resp).notFound();
+        }
     }
 
 }

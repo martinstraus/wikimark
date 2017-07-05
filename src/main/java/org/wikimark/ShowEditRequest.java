@@ -23,29 +23,25 @@
  */
 package org.wikimark;
 
-import java.time.Instant;
-import java.util.List;
+import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author Martín Straus
  */
-public interface PageContext {
+final class ShowEditRequest {
     
-    String name();
+    private final HttpServletRequest request;
+    private final Pages pages;
 
-    String author();
+    public ShowEditRequest(HttpServletRequest request, Pages pages) {
+        this.request = request;
+        this.pages = pages;
+    }
 
-    String content();
-
-    List<String> keywords();
-
-    String title();
-
-    String url(Context appContext);
-
-    Instant creationTime();
-
-    String rawContent();
-
+    public Optional<Page> page() {
+        return pages.find(request.getPathInfo().substring(0, request.getPathInfo().indexOf("/edit")));
+    }
+    
 }

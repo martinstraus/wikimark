@@ -23,29 +23,49 @@
  */
 package org.wikimark;
 
-import java.time.Instant;
-import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
  * @author Martín Straus
  */
-public interface PageContext {
+final class EditPageForm {
     
-    String name();
+    private final HttpServletRequest request;
+    private final Pages pages;
 
-    String author();
+    public EditPageForm(HttpServletRequest request, Pages pages) {
+        this.request = request;
+        this.pages = pages;
+    }
 
-    String content();
+    public Page edit(HttpServletResponse resp) {
+        final Page page = page().orElseThrow(() -> new IllegalArgumentException());
+        page.update(pages, title(), content(), keywords());
+        return page;
+    }
 
-    List<String> keywords();
+    private Optional<Page> page() {
+        return pages.find(pageName());
+    }
 
-    String title();
+    private String pageName() {
+        return request.getPathInfo().substring(1, request.getPathInfo().length());
+    }
 
-    String url(Context appContext);
+    private String title() {
+        return request.getParameter("title");
+    }
 
-    Instant creationTime();
+    private String content() {
+        return request.getParameter("content");
+    }
 
-    String rawContent();
-
+    private Set<String> keywords() {
+        return new Keywords().fromString(request.getParameter("keywords"));
+    }
+    
 }

@@ -52,7 +52,7 @@ public class NewPageForm {
     }
 
     public Set<String> keywords() {
-        return new SplitString(request.getParameter("keywords"), ",").values();
+        return new Keywords().fromString(request.getParameter("keywords"));
     }
 
     public String content() {
