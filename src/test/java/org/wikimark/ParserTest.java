@@ -29,9 +29,10 @@ import java.util.HashSet;
 import static org.hamcrest.CoreMatchers.is;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.internal.matchers.TypeSafeMatcher;
+
 
 /**
  *
