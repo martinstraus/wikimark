@@ -21,8 +21,14 @@
                 <p>You can <a href="new-page">create a new page</a>.</p>
             </c:if>
             <form action="${pageContext.request.contextPath}/pages" method="get">
-                <input type="text" name="query" class="u-full-width">
-                <button type="submit" class="button-primary">Search</button>
+                <div class="row">
+                    <div class="ten columns">
+                        <input type="text" name="query" class="u-full-width">
+                    </div>
+                    <div class="two columns">
+                        <button type="submit" class="button-primary">Search</button>
+                    </div>
+                </div>
             </form>
             <div class="row">
                 <div class="four columns">
