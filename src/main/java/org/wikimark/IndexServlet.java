@@ -24,6 +24,8 @@
 package org.wikimark;
 
 import java.io.IOException;
+import java.util.List;
+import static java.util.stream.Collectors.toList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,16 +37,24 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class IndexServlet extends HttpServlet {
 
+    private final Context context;
     private final Pages pages;
     
-    public IndexServlet(Pages pages) {
+    public IndexServlet(Context context, Pages pages) {
+        this.context = context;
         this.pages = pages;
     }
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("latestPages", pages.findLatest(5));
-        req.getRequestDispatcher("/WEB-INF/pages/index.jsp").forward(req, resp);
+        new Request(req)
+            .withAttribute("context", context)
+            .withAttribute("latestPages", latestPages())
+            .forwardTo("/WEB-INF/pages/index.jsp", resp);
+    }
+    
+    private List<PageContext> latestPages() {
+        return pages.findLatest(5).stream().map((p) -> p.pageContext()).collect(toList());
     }
     
 }

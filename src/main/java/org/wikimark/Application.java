@@ -55,7 +55,7 @@ public class Application implements ServletContextListener {
                 )
                 .registerServlet("LogIn", new LogInServlet(), "/login")
                 .registerServlet("Create page", new NewPageServlet(context, pages), "/new-page")
-                .registerServlet("index", new IndexServlet(pages), "/index.html")
+                .registerServlet("index", new IndexServlet(context, pages), "/index.html")
                 .registerServlet(
                     "Attachments", 
                     new AttachmentServlet(new File(root, "attachments").toPath()), 

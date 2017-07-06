@@ -32,13 +32,13 @@
                             <p>There are no pages... yet. <a href="pages/new-page">Create one!</a></p>
                         </c:if>
                         <c:if test="${not latestPages.isEmpty()}">
-                        <ol class="search-results">
-                            <c:forEach items="${latestPages}" var="page">
-                            <li>
-                                ${page.abstractAsHTML()}
-                            </li>
-                            </c:forEach>
-                        </ol>
+                            <ol class="search-results">
+                                <c:forEach items="${latestPages}" var="page">
+                                    <li>
+                                        <a href="${page.url(context)}">${page.title()}</a> <span class="author">by ${page.author()}</span>
+                                    </li>
+                                </c:forEach>
+                            </ol>
                         </c:if>
                     </div>
                 </div>
