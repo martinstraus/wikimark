@@ -31,7 +31,7 @@
                 </div>
             </form>
             <div class="row">
-                <div class="four columns">
+                <div class="six columns">
                     <div class="panel with-border">
                         <h3>Latest pages</h3>
                         <c:if test="${latestPages.isEmpty()}">
