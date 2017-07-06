@@ -24,12 +24,11 @@
 package org.wikimark;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Optional;
+import static java.util.stream.Collectors.toList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.velocity.VelocityContext;
 
 /**
  *
@@ -43,12 +42,10 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
 
     private final Context context;
     private final Pages pages;
-    private final org.apache.velocity.Template searchResultPageTemplate;
 
-    public PageServlet(Context context, Pages pages, org.apache.velocity.Template searchResultPageTemplate) {
+    public PageServlet(Context context, Pages pages) {
         this.context = context;
         this.pages = pages;
-        this.searchResultPageTemplate = searchResultPageTemplate;
     }
 
     @Override
@@ -63,16 +60,21 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void search(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        final VelocityContext vc = new VelocityContext();
-        vc.put("found", pages.findByTerms(req.getParameter("query"), 20));
-        searchResultPageTemplate.merge(vc, resp.getWriter());
+        new Request(req)
+            .withAttribute("context", context)
+            .withAttribute(
+                "found", 
+                pages.findByTerms(req.getParameter("query"), 20).stream().map((page) -> page.pageContext()).collect(toList())
+            )
+            .forwardTo("/WEB-INF/pages/search-results.jsp", resp);
     }
 
     private void showOne(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Optional<Page> page = new PageRequest(pages, req).page();
-        if (page.isPresent()) {
+        final Optional<Page> foundPage = new PageRequest(pages, req).page();
+        if (foundPage.isPresent()) {
+            final Page page = foundPage.get();
             new Request(req)
-                .withAttribute("page", page.get().pageContext())
+                .withAttribute("page", page.pageContext())
                 .forwardTo("/WEB-INF/pages/page.jsp", resp);
         } else {
             new Response(resp).notFound();

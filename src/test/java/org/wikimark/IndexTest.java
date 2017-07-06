@@ -46,7 +46,7 @@ public class IndexTest {
     @Test
     public void searchReturnsMatchingPages() throws IOException, ParseException {
         final Path tempdir = Files.createTempDirectory(".wikimark-it");
-        final Pages pages = new Pages(tempdir.toFile(), new DummyTemplate(), Charset.forName("UTF-8"));
+        final Pages pages = new Pages(tempdir.toFile(), Charset.forName("UTF-8"));
         pages.create("page-1.md", "Expected page", "Author of the Page", "# Expected page", new HashSet<>(asList("indexed")));
         pages.create("page-2.md", "Unexpected page", "Author of the Page", "# Unexpected page", Collections.EMPTY_SET);
         final List<Document> found = new Index(pages.all()).search("expected", 5);

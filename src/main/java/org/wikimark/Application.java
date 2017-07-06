@@ -29,9 +29,6 @@ import java.nio.charset.Charset;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 /**
  *
@@ -43,23 +40,17 @@ public class Application implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         try {
             final Context context = new Context(sce.getServletContext());
-            final VelocityEngine velocity = velocity();
             final File root = new File(System.getProperty("user.home"), ".wikimark");
             
             if (!root.exists()) {
                 root.mkdir();
             }
             
-            final Pages pages = new Pages(
-                new File(root, "pages"),
-                new VelocityTemplate(velocity, "org/wikimark/page-abstract.vsl", context),
-                Charset.forName("UTF-8")
-            );
+            final Pages pages = new Pages(new File(root, "pages"), Charset.forName("UTF-8"));
             
             context
-                .registerServlet(
-                    "Page",
-                    new PageServlet(context, pages, velocity.getTemplate("org/wikimark/search-result.vsl")),
+                .registerServlet("Page",
+                    new PageServlet(context, pages),
                     "/pages/*"
                 )
                 .registerServlet("LogIn", new LogInServlet(), "/login")
@@ -75,13 +66,6 @@ public class Application implements ServletContextListener {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-    private VelocityEngine velocity() {
-        VelocityEngine velocity = new VelocityEngine();
-        velocity.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-        velocity.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
-        return velocity;
     }
 
     @Override
