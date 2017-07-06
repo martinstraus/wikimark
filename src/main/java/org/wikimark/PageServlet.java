@@ -58,7 +58,7 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
         } else if (req.getPathInfo().endsWith("/edit")) {
             showEdit(req, resp);
         } else {
-            findOne(req, resp);
+            showOne(req, resp);
         }
     }
 
@@ -68,13 +68,12 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
         searchResultPageTemplate.merge(vc, resp.getWriter());
     }
 
-    private void findOne(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void showOne(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Optional<Page> page = new PageRequest(pages, req).page();
         if (page.isPresent()) {
-            new Response(resp)
-                .withContentOfType("text/html")
-                .encodedWithCharacterSet("UTF-8")
-                .readContentFrom(page.get().asHTML().getBytes(Charset.forName("UTF-8")));
+            new Request(req)
+                .withAttribute("page", page.get().pageContext())
+                .forwardTo("/WEB-INF/pages/page.jsp", resp);
         } else {
             new Response(resp).notFound();
         }

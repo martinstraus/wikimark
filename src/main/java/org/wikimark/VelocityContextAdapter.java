@@ -34,14 +34,13 @@ import org.apache.velocity.VelocityContext;
  * @author Martín Straus
  */
 public class VelocityContextAdapter implements org.apache.velocity.context.Context {
-    
-    public static class Dates {
+
+    private final class Dates {
+
         public String format(Instant instant) {
-            return DateTimeFormatter
-                .ofLocalizedDateTime(FormatStyle.FULL)
-                .withZone(ZoneId.systemDefault())
-                .format(instant);
+            return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).withZone(ZoneId.systemDefault()).format(instant);
         }
+
     }
 
     private final VelocityContext context;

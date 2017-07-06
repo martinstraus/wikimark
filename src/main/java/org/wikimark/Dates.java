@@ -23,33 +23,19 @@
  */
 package org.wikimark;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import static java.util.Arrays.asList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.queryparser.classic.ParseException;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
-import org.junit.Test;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 /**
  *
  * @author Martín Straus
  */
-public class IndexTest {
+public class Dates {
 
-    @Test
-    public void searchReturnsMatchingPages() throws IOException, ParseException {
-        final Path tempdir = Files.createTempDirectory(".wikimark-it");
-        final Pages pages = new Pages(tempdir.toFile(), new DummyTemplate(), Charset.forName("UTF-8"));
-        pages.create("page-1.md", "Expected page", "Author of the Page", "# Expected page", new HashSet<>(asList("indexed")));
-        pages.create("page-2.md", "Unexpected page", "Author of the Page", "# Unexpected page", Collections.EMPTY_SET);
-        final List<Document> found = new Index(pages.all()).search("expected", 5);
-        assertThat("documents found in " + tempdir.toAbsolutePath().toString(), found, hasSize(1));
+    public static String format(Instant instant) {
+        return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).withZone(ZoneId.systemDefault()).format(instant);
     }
+
 }

@@ -41,7 +41,6 @@ import org.apache.lucene.document.TextField;
  */
 public class Page {
 
-    private final Template template;
     private final Template abstractTemplate;
     private final String name;
     private final String title;
@@ -50,8 +49,7 @@ public class Page {
     private final Set<String> keywords;
     private final Instant creationTime;
 
-    public Page(Template template, Template abstractTemplate, String name, String title, String author, String content, Set<String> keywords, Instant creationTime) {
-        this.template = template;
+    public Page(Template abstractTemplate, String name, String title, String author, String content, Set<String> keywords, Instant creationTime) {
         this.abstractTemplate = abstractTemplate;
         this.name = name;
         this.title = title;
@@ -59,10 +57,6 @@ public class Page {
         this.content = content;
         this.keywords = new HashSet<>(keywords);
         this.creationTime = creationTime;
-    }
-
-    public String asHTML() {
-        return template.render(pageContext());
     }
 
     public String abstractAsHTML() {

@@ -43,7 +43,7 @@ public class PagesTest {
     @Test
     public void fileExistsAfterCreation() throws IOException, ParseException {
         final Path tempdir = Files.createTempDirectory(".wikimark-it");
-        final Pages pages = new Pages(tempdir.toFile(), new DummyTemplate(), new DummyTemplate(), Charset.defaultCharset());
+        final Pages pages = new Pages(tempdir.toFile(), new DummyTemplate(), Charset.defaultCharset());
         pages.create("test.md", "", "", "test", Collections.EMPTY_SET);
         assertThat("file for new page exists", tempdir.resolve("test.md").toFile().exists(), is(true));
     }
@@ -51,7 +51,7 @@ public class PagesTest {
     @Test
     public void allReturnsAllCreatedPages() throws IOException, ParseException {
         final Path tempdir = Files.createTempDirectory(".wikimark-it");
-        final Pages pages = new Pages(tempdir.toFile(), new DummyTemplate(), new DummyTemplate(), Charset.defaultCharset());
+        final Pages pages = new Pages(tempdir.toFile(), new DummyTemplate(), Charset.defaultCharset());
         pages.create("p1.md", "Page 1", "Author", "content", Collections.EMPTY_SET);
         pages.create("p2.md", "Page 2", "Author", "content", Collections.EMPTY_SET);
         assertThat("all pages", pages.all(), hasSize(2));

@@ -52,7 +52,6 @@ public class Application implements ServletContextListener {
             
             final Pages pages = new Pages(
                 new File(root, "pages"),
-                new VelocityTemplate(velocity, "org/wikimark/page-template.vsl", context),
                 new VelocityTemplate(velocity, "org/wikimark/page-abstract.vsl", context),
                 Charset.forName("UTF-8")
             );

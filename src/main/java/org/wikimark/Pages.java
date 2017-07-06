@@ -48,14 +48,12 @@ import org.apache.lucene.queryparser.classic.ParseException;
 public class Pages {
 
     private final File root;
-    private final Template template;
     private final Template abstractTemplate;
     private final Charset charset;
     private final Index index;
 
-    public Pages(File root, Template template, Template abstractTemplate, Charset charset) throws IOException {
+    public Pages(File root, Template abstractTemplate, Charset charset) throws IOException {
         this.root = root;
-        this.template = template;
         this.abstractTemplate = abstractTemplate;
         this.charset = charset;
         this.index = new Index(all());
@@ -72,8 +70,7 @@ public class Pages {
         try (FileInputStream input = new FileInputStream(file)) {
             final AST ast = new Parser().parse(input);
             return new Page(
-                template,
-                abstractTemplate,
+                                abstractTemplate,
                 name,
                 ast.title(),
                 ast.author(),
@@ -91,8 +88,7 @@ public class Pages {
             final File file = new java.io.File(root, name);
             saveToFile(file, title, author, content, keywords);
             final Page page = new Page(
-                template,
-                abstractTemplate,
+                                abstractTemplate,
                 name,
                 title,
                 author,
