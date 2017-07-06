@@ -23,7 +23,7 @@
             <form action="${pageContext.request.contextPath}/pages" method="get">
                 <div class="row">
                     <div class="ten columns">
-                        <input type="text" name="query" class="u-full-width">
+                        <input type="text" name="query" class="u-full-width" placeholder="Enter your seach here...">
                     </div>
                     <div class="two columns">
                         <button type="submit" class="button-primary">Search</button>
