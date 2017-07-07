@@ -1,3 +1,9 @@
+/*
+    The colors used come from these palletes:
+
+    http://paletton.com/#uid=73p0u0kt+lZlOstrKqzzSiaJidt
+    http://paletton.com/#uid=13p0u0kqbVZeCY5kNX2vWTRPAMi
+*/
 html, body {
     min-height: 100%;
 }
@@ -66,4 +72,54 @@ ul.tags li a {
     color: #ffffff;
     text-decoration: none;
     white-space: nowrap;
+}
+
+nav {
+    background-color: #31778E;
+    text-transform: uppercase;
+    min-height: 1em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 16px;
+    margin-bottom: 1em;
+}
+
+nav ul {
+    float: right;
+    list-style-type: none;
+}
+
+nav ul li {
+    padding-left: 1em;
+    padding-right: 1em;
+    display: inline;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+main {
+    clear: right;
+}
+
+a .shown-only {
+    display: none;
+}
+
+@media (min-width: 750px) {
+    a .shown-only.tablet {
+        display: inline;
+    }
+}
+
+@media (min-width: 1000px) {
+    a .shown-only.desktop {
+        display: inline;
+    }
+}
+
+object.logomark {
+    width: 32px;
 }

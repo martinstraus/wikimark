@@ -34,7 +34,6 @@ THE SOFTWARE.
         <jsp:include page="/WEB-INF/pages/navigation.jsp"/>
         <main>
             <div class="container">
-                <h1>Wikimark</h1>
                 <form action="${pageContext.request.contextPath}/pages" method="get">
                     <div class="row">
                         <div class="ten columns">

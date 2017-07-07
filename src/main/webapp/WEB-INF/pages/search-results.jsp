@@ -18,7 +18,6 @@
     <body class="search-results">
         <jsp:include page="/WEB-INF/pages/navigation.jsp"/>
         <div class="container">
-            <h1>Wikimark</h1>
             <h2>Search results</h2>
             <ol class="search-results">
             <c:forEach items="${found}" var="page">

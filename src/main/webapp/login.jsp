@@ -10,7 +10,6 @@
     <body class="index">
         <jsp:include page="/WEB-INF/pages/navigation.jsp"/>
         <div class="container">
-            <h1>Wikimark</h1>
             <c:if test="${not empty mensaje}">
                 <p class="error">${mensaje}</p>
             </c:if>
