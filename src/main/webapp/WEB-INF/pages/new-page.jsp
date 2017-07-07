@@ -28,12 +28,10 @@ THE SOFTWARE.
         <meta name="description" content="A new wiki page">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
         <title>Wikimark - New page</title>
-        <link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet"> 
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/skeleton.css">
-        <link rel="stylesheet" href="css/wikimark.css">
+        <jsp:include page="/WEB-INF/pages/styles.jsp"/>
     </head>
     <body>
+        <jsp:include page="/WEB-INF/pages/navigation.jsp"/>
         <div class="container">
             <h1>New page</h1>   
             <form action="${pageContext.request.contextPath}/new-page" method="post">

@@ -62,7 +62,7 @@ public class Application implements ServletContextListener {
                     new MultipartConfigElement(new File(root, "attachments").getAbsolutePath()),
                     "/attachments/*"
                 );
-
+            new ContextFilter(context);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

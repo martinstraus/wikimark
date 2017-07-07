@@ -23,6 +23,10 @@
  */
 package org.wikimark;
 
+import static java.util.Arrays.asList;
+import java.util.function.Consumer;
+import javax.servlet.Filter;
+import javax.servlet.FilterRegistration;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -51,6 +55,16 @@ public class Context {
         }
         registration.addMapping(mappings);
         return this;
+    }
+
+    public Context registerFilter(String name, Filter filter, Consumer<FilterRegistration.Dynamic>... registrations) {
+        FilterRegistration.Dynamic registracion = context.addFilter(name, filter);
+        asList(registrations).forEach((c) -> c.accept(registracion));
+        return this;
+    }
+
+    public String baseURL() {
+        return context.getContextPath();
     }
 
     public String urlRelativeToHost(String url) {

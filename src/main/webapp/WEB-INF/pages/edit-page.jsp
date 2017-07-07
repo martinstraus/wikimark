@@ -28,12 +28,10 @@ THE SOFTWARE.
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
         <title>${page.title()} - Edit</title>
-        <link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet"> 
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/normalize.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/skeleton.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/wikimark.css">
+        <jsp:include page="/WEB-INF/pages/styles.jsp"/>
     </head>
     <body>
+        <jsp:include page="/WEB-INF/pages/navigation.jsp"/>
         <div class="container">
             <h1>Edit page</h1>   
             <form action="${pageContext.request.contextPath}/pages${page.name()}" method="post">

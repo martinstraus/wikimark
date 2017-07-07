@@ -24,36 +24,49 @@
 package org.wikimark;
 
 import java.io.IOException;
-import java.util.List;
-import static java.util.stream.Collectors.toList;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 /**
  *
  * @author Martín Straus
  */
-public class IndexServlet extends HttpServlet {
+public class ContextFilter implements Filter {
 
     private final Context context;
-    private final Pages pages;
-    
-    public IndexServlet(Context context, Pages pages) {
+
+    public ContextFilter(Context context) {
         this.context = context;
-        this.pages = pages;
+        context.registerFilter(
+            "Context filter",
+            this,
+            (r) -> r.addMappingForUrlPatterns(null, true, "*")
+        );
     }
-    
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        new Request(req)
-            .withAttribute("latestPages", latestPages())
-            .forwardTo("/WEB-INF/pages/index.jsp", resp);
+    public void init(FilterConfig fc) throws ServletException {
+
     }
-    
-    private List<PageContext> latestPages() {
-        return pages.findLatest(5).stream().map((p) -> p.pageContext()).collect(toList());
+
+    @Override
+    public void doFilter(ServletRequest sr, ServletResponse sr1, FilterChain fc) throws IOException, ServletException {
+        try {
+            sr.setAttribute("context", context);
+            fc.doFilter(sr, sr1);
+        } finally {
+            sr.removeAttribute("context");
+        }
+
     }
-    
+
+    @Override
+    public void destroy() {
+
+    }
+
 }

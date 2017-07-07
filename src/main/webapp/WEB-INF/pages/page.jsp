@@ -33,27 +33,25 @@ THE SOFTWARE.
         <meta name="author" content="${page.author()}">
         <meta name="keywords" content="${wm:separatedBy(page.keywords(),',')}">
         <meta name="generator" content="Wikimark">
-        <link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet"> 
-        <link rel="stylesheet" href="../css/normalize.css">
-        <link rel="stylesheet" href="../css/skeleton.css">
-        <link rel="stylesheet" href="../css/wikimark.css">
+        <jsp:include page="/WEB-INF/pages/styles.jsp"/>
     </head>
     <body class="page">
-        <header>
-            <div class="container">
-                <h1>${page.title()}</h1>
-                <div class="page-info">
-                    <p>Created by <a href="../pages?query=${page.author()}">${page.author()}</a> on ${wm:instantToString(page.creationTime())}</p>
-                    <ul class="tags">
-                        <c:forEach items="${page.keywords()}" var="keyword">
-                        <li><a href="../pages?query=$keyword">${keyword}</a></li>
-                        </c:forEach>
-                    <ul>
-                </div>
-            </div>
-        </header>
+        <jsp:include page="/WEB-INF/pages/navigation.jsp"/>
         <div class="container">
-            ${page.content()}
+            <article>
+                <header>
+                        <h1>${page.title()}</h1>
+                        <div class="page-info">
+                            <p>Created by <a href="../pages?query=${page.author()}">${page.author()}</a> on ${wm:instantToString(page.creationTime())}</p>
+                            <ul class="tags">
+                                <c:forEach items="${page.keywords()}" var="keyword">
+                                <li><a href="../pages?query=$keyword">${keyword}</a></li>
+                                </c:forEach>
+                            <ul>
+                        </div>
+                </header>
+                ${page.content()}
+            </article>
         </div>
     </body>
 </html>
