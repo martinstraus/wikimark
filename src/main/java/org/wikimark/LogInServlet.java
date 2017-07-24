@@ -41,9 +41,8 @@ public class LogInServlet extends HttpServlet {
             req.login(req.getParameter("j_username"), req.getParameter("j_password"));
             resp.sendRedirect(req.getContextPath());
         } catch (ServletException ex) {
-            ex.printStackTrace();
-            req.setAttribute("mensaje", "Error de autenticación.");
-            req.getRequestDispatcher("index.jsp").forward(req, resp);
+            req.setAttribute("mensaje", "Authentication error. Check your username and password.");
+            req.getRequestDispatcher("/login.jsp").forward(req, resp);
         }
     }
 
