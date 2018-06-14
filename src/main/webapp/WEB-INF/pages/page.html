@@ -31,6 +31,7 @@ THE SOFTWARE.
     <body>
         <header th:replace="template :: header"/>
         <div class="container">
+            <a th:href="@{/pages/{page}/edit(page=${page.name()})}" th:if="${#request.isUserInRole('editor')}" class="button">Edit</a>
             <article>
                 <header>
                     <h1 th:text="${page.title()}">The title</h1>
