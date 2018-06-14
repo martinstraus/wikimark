@@ -31,6 +31,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
@@ -58,11 +59,8 @@ public class Application implements ServletContextListener {
             new LogInServlet(sc, thymeleaf);
             new LogOutServlet(sc);
             new NewPageServlet(sc, thymeleaf, context, pages);
+            new PageServlet(sc, thymeleaf, context, pages);
             context
-                .registerServlet("Page",
-                    new PageServlet(context, pages),
-                    "/pages/*"
-                )
                 .registerServlet("index", new IndexServlet(context, pages), "/index.html")
                 .registerServlet(
                     "Attachments", 
@@ -84,6 +82,7 @@ public class Application implements ServletContextListener {
         tr.setCharacterEncoding("UTF-8");
         final TemplateEngine te = new TemplateEngine();
         te.setTemplateResolver(tr);
+        te.addDialect(new Java8TimeDialect());
         return te;
     }
 

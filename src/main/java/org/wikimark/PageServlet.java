@@ -24,11 +24,16 @@
 package org.wikimark;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import static java.util.stream.Collectors.toList;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 
 /**
  *
@@ -40,12 +45,15 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
         return request.getPathInfo().substring(1, request.getPathInfo().length());
     }
 
+    private final TemplateEngine thymeleaf;
     private final Context context;
     private final Pages pages;
 
-    public PageServlet(Context context, Pages pages) {
+    public PageServlet(ServletContext ctx, TemplateEngine thymeleaf, Context context, Pages pages) {
+        this.thymeleaf = thymeleaf;
         this.context = context;
         this.pages = pages;
+        ctx.addServlet(PageServlet.class.getName(), this).addMapping("/pages/*");
     }
 
     @Override
@@ -62,7 +70,7 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
     private void search(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         new Request(req)
             .withAttribute(
-                "found", 
+                "found",
                 pages.findByTerms(req.getParameter("query"), 20).stream().map((page) -> page.pageContext()).collect(toList())
             )
             .forwardTo("/WEB-INF/pages/search-results.jsp", resp);
@@ -72,9 +80,9 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
         final Optional<Page> foundPage = new PageRequest(pages, req).page();
         if (foundPage.isPresent()) {
             final Page page = foundPage.get();
-            new Request(req)
-                .withAttribute("page", page.pageContext())
-                .forwardTo("/WEB-INF/pages/page.jsp", resp);
+            WebContext webContext = new WebContext(req, resp, req.getServletContext());
+            webContext.setVariable("page", page.pageContext());
+            thymeleaf.process("/page", webContext, resp.getWriter());
         } else {
             new Response(resp).notFound();
         }
