@@ -57,12 +57,12 @@ public class Application implements ServletContextListener {
             
             new LogInServlet(sc, thymeleaf);
             new LogOutServlet(sc);
+            new NewPageServlet(sc, thymeleaf, context, pages);
             context
                 .registerServlet("Page",
                     new PageServlet(context, pages),
                     "/pages/*"
                 )
-                .registerServlet("Create page", new NewPageServlet(context, pages), "/new-page")
                 .registerServlet("index", new IndexServlet(context, pages), "/index.html")
                 .registerServlet(
                     "Attachments", 

@@ -24,10 +24,13 @@
 package org.wikimark;
 
 import java.io.IOException;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 
 /**
  *
@@ -35,17 +38,21 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class NewPageServlet extends HttpServlet {
 
+    private final TemplateEngine thymeleaf;
     private final Context context;
     private final Pages pages;
 
-    public NewPageServlet(Context context, Pages pages) {
+    public NewPageServlet(ServletContext ctx, TemplateEngine thymeleaf, Context context, Pages pages) {
         this.context = context;
         this.pages = pages;
+        this.thymeleaf = thymeleaf;
+        ctx.addServlet(NewPageServlet.class.getName(), this).addMapping("/new-page");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/pages/new-page.jsp").forward(req, resp);
+        WebContext webContext = new WebContext(req, resp, req.getServletContext());
+        thymeleaf.process("/new-page", webContext, resp.getWriter());
     }
 
     @Override
