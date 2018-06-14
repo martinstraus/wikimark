@@ -27,8 +27,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 /**
  *
@@ -39,8 +43,11 @@ public class Application implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         try {
-            final Context context = new Context(sce.getServletContext());
+            final ServletContext sc = sce.getServletContext();
+            final Context context = new Context(sc);
             final File root = new File(System.getProperty("user.home"), ".wikimark");
+            
+            final TemplateEngine thymeleaf = thymeleaf(sc);
             
             if (!root.exists()) {
                 root.mkdir();
@@ -66,6 +73,17 @@ public class Application implements ServletContextListener {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+    }
+    
+    private TemplateEngine thymeleaf(ServletContext servletContext) {
+        final ServletContextTemplateResolver tr = new ServletContextTemplateResolver(servletContext);
+        tr.setTemplateMode(TemplateMode.HTML);
+        tr.setPrefix("/WEB-INF/pages/");
+        tr.setSuffix(".html");
+        tr.setCharacterEncoding("UTF-8");
+        final TemplateEngine te = new TemplateEngine();
+        te.setTemplateResolver(tr);
+        return te;
     }
 
     @Override
