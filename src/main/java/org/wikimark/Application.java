@@ -55,12 +55,13 @@ public class Application implements ServletContextListener {
             
             final Pages pages = new Pages(new File(root, "pages"), Charset.forName("UTF-8"));
             
+            new LogInServlet(sc, thymeleaf);
+            new LogOutServlet(sc);
             context
                 .registerServlet("Page",
                     new PageServlet(context, pages),
                     "/pages/*"
                 )
-                .registerServlet("LogIn", new LogInServlet(), "/login")
                 .registerServlet("Create page", new NewPageServlet(context, pages), "/new-page")
                 .registerServlet("index", new IndexServlet(context, pages), "/index.html")
                 .registerServlet(

@@ -28,11 +28,11 @@ THE SOFTWARE.
     <ul>
         <li><a href="${context.baseURL()}"><i class="fa fa-home"></i><span class="shown-only tablet desktop">&nbsp;Home</span></a></li>
                     <c:if test="${empty pageContext.request.userPrincipal}">
-            <li><a href="${context.urlRelativeToHost('/login.jsp')}" title="Sign in"><i class="fa fa-sign-in"></i><span class="shown-only tablet desktop">&nbsp;Sign in</span></a></li>
+            <li><a href="${context.urlRelativeToHost('/login')}" title="Sign in"><i class="fa fa-sign-in"></i><span class="shown-only tablet desktop">&nbsp;Sign in</span></a></li>
                     </c:if>
                     <c:if test="${not empty pageContext.request.userPrincipal}">
             <li><a href="${context.urlRelativeToHost('/new-page')}" title="Create new page"><i class="fa fa-plus"></i><span class="shown-only tablet desktop">&nbsp;Create new page</span></a></a></li>
-            <li><a href="#" title="Sign out"><i class="fa fa-sign-out"></i><span class="shown-only tablet desktop">&nbsp;Sign out</span></a></li>
+            <li><a href="${context.urlRelativeToHost('/logout')}" title="Sign out"><i class="fa fa-sign-out"></i><span class="shown-only tablet desktop">&nbsp;Sign out</span></a></li>
                     </c:if>
     </ul>
 </nav>

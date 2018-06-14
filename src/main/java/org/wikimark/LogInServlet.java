@@ -24,10 +24,13 @@
 package org.wikimark;
 
 import java.io.IOException;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 
 /**
  *
@@ -35,15 +38,32 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class LogInServlet extends HttpServlet {
 
+    private final TemplateEngine thymeleaf;
+
+    public LogInServlet(ServletContext ctx, TemplateEngine thymeleaf) {
+        this.thymeleaf = thymeleaf;
+        ctx.addServlet(LogInServlet.class.getName(), this).addMapping("/login");
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        render(req, resp);
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             req.login(req.getParameter("j_username"), req.getParameter("j_password"));
-            resp.sendRedirect(req.getContextPath());
+            resp.sendRedirect("/");
         } catch (ServletException ex) {
             req.setAttribute("mensaje", "Authentication error. Check your username and password.");
-            req.getRequestDispatcher("/login.jsp").forward(req, resp);
+            render(req, resp);
         }
+    }
+
+    private void render(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        WebContext webContext = new WebContext(req, resp, req.getServletContext());
+        thymeleaf.process("/login", webContext, resp.getWriter());
     }
 
 }
