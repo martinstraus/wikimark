@@ -44,17 +44,17 @@ THE SOFTWARE.
                         </a>
                     </li>
                     <li>
-                        <a th:href="@{/login}" title="Sign in">
+                        <a th:href="@{/login}" th:if="${#request.userPrincipal == null}" title="Sign in">
                             <i class="fa fa-sign-in"></i><span class="shown-only tablet desktop">&nbsp;Sign in</span>
                         </a>
                     </li>
                     <li>
-                        <a th:href="@{/new-page}" title="Create new page">
+                        <a th:href="@{/new-page}" th:if="${#request.userPrincipal != null}" title="Create new page">
                             <i class="fa fa-plus"></i><span class="shown-only tablet desktop">&nbsp;Create new page</span>
                         </a>
                     </li>
                     <li>
-                        <a th:href="@{/logout}" title="Sign out">
+                        <a th:href="@{/logout}" th:if="${#request.userPrincipal != null}" title="Sign out">
                             <i class="fa fa-sign-out"></i><span class="shown-only tablet desktop">&nbsp;Sign out</span>
                         </a>
                     </li>
