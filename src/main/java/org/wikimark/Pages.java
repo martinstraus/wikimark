@@ -122,7 +122,7 @@ public class Pages {
     }
 
     public Set<Page> all() {
-        var pages = new TreeSet<>(Page.SORT_BY_TITLE);
+        TreeSet<Page> pages = new TreeSet<>(Page.SORT_BY_TITLE);
         pages.addAll(findAllPages());
         return pages;
     }
