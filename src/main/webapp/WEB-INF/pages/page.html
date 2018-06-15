@@ -31,16 +31,26 @@ THE SOFTWARE.
     <body>
         <header th:replace="template :: header"/>
         <div class="container">
-            <a th:href="@{/pages/{page}/edit(page=${page.name()})}" th:if="${#request.isUserInRole('editor')}" class="button">Edit</a>
-            <article>
-                <header>
-                    <h1 th:text="${page.title()}">The title</h1>
-                    <div class="page-info">
-                        <p>
-                            Created by 
-                            <a th:href="@{/pages(query=${page.author()})}" th:text="${page.author}">John Smith</a>
-                            on <span th:text="${#temporals.formatISO(page.creationTime())}"> july 14, 2018</span>
-                        </p>
+            <article class="row">
+                <main class="ten columns">
+                    <div th:utext="${page.content()}">The content</div>
+                </main>
+                <header class="meta two columns">
+                    <a th:href="@{/pages/{page}/edit(page=${page.name()})}" th:if="${#request.isUserInRole('editor')}" class="button">Edit</a>
+                    <div class="row">
+                        <label>Title</label>
+                        <p th:text="${page.title()}">The title</p>
+                    </div>
+                    <div class="row">
+                        <label>Created by</label>
+                        <a th:href="@{/pages(query=${page.author()})}" th:text="${page.author}">John Smith</a>
+                    </div>
+                    <div class="row">
+                        <label>on</label>
+                        <p th:text="${#temporals.formatISO(page.creationTime())}"> july 14, 2018</p>
+                    </div>
+                    <div class="row">
+                        <label>Tags</label>
                         <ul class="tags">
                             <li th:each="tag : ${page.keywords()}">
                                 <a th:href="@{/pages(query=${tag})}" th:text="${tag}">etiqueta</a>
@@ -48,7 +58,6 @@ THE SOFTWARE.
                         </ul>
                     </div>
                 </header>
-                <div th:utext="${page.content()}">The content</div>
             </article>
         </div>
     </body>

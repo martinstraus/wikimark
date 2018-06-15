@@ -57,8 +57,12 @@ div.panel.with-border {
     border-radius: 4px;
 }
 
+ul.tags {
+    list-style-type: none;
+}
+
 ul.tags li {
-    display: inline;
+    display: inline-block;
     color: #ffffff;
     border-radius: 3px;
     background-color: #039FD3; /* Generated with http://paletton.com/#uid=13p0u0kqbVZeCY5kNX2vWTRPAMi */
@@ -122,4 +126,18 @@ a .shown-only {
 
 object.logomark {
     width: 32px;
+}
+
+article > header.meta {
+    font-size: 0.85em;
+}
+
+article > main {
+    text-align: justify;
+}
+
+pre > code {
+    /* This colors come from the Darkula color scheme. See https://draculatheme.com */
+    background-color: #232733;
+    color: #f8f8f2;
 }
