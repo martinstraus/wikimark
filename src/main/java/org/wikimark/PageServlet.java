@@ -68,12 +68,16 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void search(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        new Request(req)
-            .withAttribute(
-                "found",
-                pages.findByTerms(req.getParameter("query"), 20).stream().map((page) -> page.pageContext()).collect(toList())
-            )
-            .forwardTo("/WEB-INF/pages/search-results.jsp", resp);
+        WebContext webContext = new WebContext(req, resp, req.getServletContext());
+        webContext.setVariable(
+            "pages", 
+            pages
+                .findByTerms(req.getParameter("query"), 20)
+                .stream()
+                .map((page) -> page.pageContext())
+                .collect(toList())
+        );
+        thymeleaf.process("/search-results", webContext, resp.getWriter());
     }
 
     private void showOne(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
