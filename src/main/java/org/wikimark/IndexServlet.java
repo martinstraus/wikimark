@@ -48,7 +48,7 @@ public class IndexServlet extends HttpServlet {
         this.thymeleaf = thymeleaf;
         this.context = context;
         this.pages = pages;
-        ctx.addServlet(IndexServlet.class.getName(), this).addMapping("/");
+        ctx.addServlet(IndexServlet.class.getName(), this).addMapping("/index.html");
     }
 
     @Override
