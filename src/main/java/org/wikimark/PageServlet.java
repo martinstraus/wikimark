@@ -93,9 +93,9 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
         if (!page.isPresent()) {
             new Response(resp).notFound();
         } else {
-            new Request(req)
-                .withAttribute("page", page.get().pageContext())
-                .forwardTo("/WEB-INF/pages/edit-page.jsp", resp);
+            WebContext webContext = new WebContext(req, resp, req.getServletContext());
+            webContext.setVariable("page", page.get().pageContext());
+            thymeleaf.process("/edit-page", webContext, resp.getWriter());
         }
     }
 
