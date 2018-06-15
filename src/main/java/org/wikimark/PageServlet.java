@@ -24,8 +24,6 @@
 package org.wikimark;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 import javax.servlet.ServletContext;
@@ -70,7 +68,7 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
     private void search(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         WebContext webContext = new WebContext(req, resp, req.getServletContext());
         webContext.setVariable(
-            "pages", 
+            "pages",
             pages
                 .findByTerms(req.getParameter("query"), 20)
                 .stream()
@@ -93,7 +91,7 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void showEdit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        final Optional<Page> page = new ShowEditRequest(req, pages).page();
+        final Optional<Page> page = pageToEdit(req);
         if (!page.isPresent()) {
             new Response(resp).notFound();
         } else {
@@ -101,6 +99,10 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
             webContext.setVariable("page", page.get().pageContext());
             thymeleaf.process("/edit-page", webContext, resp.getWriter());
         }
+    }
+
+    private Optional<Page> pageToEdit(HttpServletRequest req) {
+        return pages.find(req.getPathInfo().substring(0, req.getPathInfo().indexOf("/edit")));
     }
 
     @Override
