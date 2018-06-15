@@ -59,12 +59,16 @@ public class AttachmentServlet extends HttpServlet {
     private final Path root;
     private final TemplateEngine thymeleaf;
 
-    public AttachmentServlet(ServletContext ctx, TemplateEngine thymeleaf, File root) {
+    public AttachmentServlet(ServletContext ctx, TemplateEngine thymeleaf, File base) {
         this.thymeleaf = thymeleaf;
+        File root = new File(base, "attachments");
+        root.mkdirs();
         this.root = root.toPath();
         ServletRegistration.Dynamic registration = ctx.addServlet(AttachmentServlet.class.getName(), this);
         registration.addMapping("/attachments/*");
-        registration.setMultipartConfig(new MultipartConfigElement(new File(root, "attachments").getAbsolutePath()));
+        File temp = new File(base, "temp");
+        temp.mkdirs();
+        registration.setMultipartConfig(new MultipartConfigElement(temp.getAbsolutePath()));
     }
 
     @Override
