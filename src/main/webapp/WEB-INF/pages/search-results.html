@@ -32,10 +32,31 @@ THE SOFTWARE.
         <header th:replace="template :: header"/>
         <div class="container">
             <h2>Search results</h2>
-            <ol class="search-results">
-                <li th:each="page : ${pages}">
-                    <a th:href="@{/pages/{page}(page=${page.name()})}" th:text="${page.title()}">The title</a>
-                    <span class="author" th:text="|by ${page.author()}|">by John Smith</span>
+            <p th:if="${pages.isEmpty()}">
+                There are no pages... yet. <a th:href="@{/pages/new-page}">Create one!</a>
+            </p>
+            <ol class="search-results" th:if="${not pages.isEmpty()}"
+                th:remove="all-but-first">
+                <li th:each="page : ${pages}" class="row">
+                    <a th:href="@{/pages/{page}(page=${page.name()})}" th:text="${page.title}"
+                       role="title">
+                        The title
+                    </a>
+                    <p class="author" th:text="|by ${page.author()}|">by John Smith</p>
+                    <ul class="tags" th:remove="all-but-first">
+                        <li th:each="tag : ${page.keywords()}" th:text="${tag}">tag1</li>
+                    </ul>
+                </li>
+                <li>
+                    <div>
+                        <a href=# role="title">The title</a>
+                    </div>
+                    <p class="author">by John Smith</p>
+                    <ul class="tags">
+                        <li>tag1</li>
+                        <li>tag2</li>
+                        <li>tag3</li>
+                    </ul>
                 </li>
             </ol>
         </div>

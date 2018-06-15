@@ -66,6 +66,7 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void search(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        resp.setHeader("Content-Type", "text/html; charset=utf-8");
         WebContext webContext = new WebContext(req, resp, req.getServletContext());
         webContext.setVariable(
             "pages",

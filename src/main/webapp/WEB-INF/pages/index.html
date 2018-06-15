@@ -27,6 +27,10 @@ THE SOFTWARE.
         <title>Login</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" th:href="@{/lib/font-awesome-4.7.0/css/font-awesome.min.css}" href="../..//lib/font-awesome-4.7.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/normalize.css}" href="../../css/normalize.css"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/skeleton.css}" href="../../css/skeleton.css"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/wikimark.css}" href="../../css/wikimark.css"/>
     </head>
     <body>
         <header th:replace="template :: header"/>
@@ -42,23 +46,33 @@ THE SOFTWARE.
                         </div>
                     </div>
                 </form>
-                <div class="row">
-                    <div class="six columns">
-                        <div class="panel with-border">
-                            <h3>Pages</h3>
-                            <p th:if="${pages.isEmpty()}">
-                                There are no pages... yet. <a th:href="@{/pages/new-page}">Create one!</a>
-                            </p>
-                            <ol class="search-results" th:if="${not pages.isEmpty()}">
-                                <li th:each="page : ${pages}">
-                                    <a th:href="@{/pages/{page}(page=${page.name()})}" th:text="${page.title}">
-                                        ${page.title()}</a> 
-                                    <span class="author" th:text="|by ${page.author()}|">by John Smith</span>
-                                </li>
-                            </ol>
+                <p th:if="${pages.isEmpty()}">
+                    There are no pages... yet. <a th:href="@{/pages/new-page}">Create one!</a>
+                </p>
+                <ol class="search-results" th:if="${not pages.isEmpty()}"
+                    th:remove="all-but-first">
+                    <li th:each="page : ${pages}" class="row">
+                        <a th:href="@{/pages/{page}(page=${page.name()})}" th:text="${page.title}"
+                           role="title">
+                            The title
+                        </a>
+                        <p class="author" th:text="|by ${page.author()}|">by John Smith</p>
+                        <ul class="tags" th:remove="all-but-first">
+                            <li th:each="tag : ${page.keywords()}" th:text="${tag}">tag1</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div>
+                            <a href=# role="title">The title</a>
                         </div>
-                    </div>
-                </div>
+                        <p class="author">by John Smith</p>
+                        <ul class="tags">
+                            <li>tag1</li>
+                            <li>tag2</li>
+                            <li>tag3</li>
+                        </ul>
+                    </li>
+                </ol>
             </div>
         </main>
     </body>

@@ -59,6 +59,7 @@ div.panel.with-border {
 
 ul.tags {
     list-style-type: none;
+    margin-left: 0;
 }
 
 ul.tags li {
@@ -140,7 +141,7 @@ article > main img {
     /* This is needed because the metadata is on the left; we don't want to overlap it if the
     image is too big. '*/
     max-width: 100%;
-    
+
     /* This is to center the image. It just looks better... */
     display: block;
     margin-left: auto;
@@ -151,4 +152,25 @@ pre > code {
     /* This colors come from the Darkula color scheme. See https://draculatheme.com */
     background-color: #232733;
     color: #f8f8f2;
+}
+
+ol.search-results {
+    list-style-type: none;
+}
+
+ol.search-results ul.tags {
+    margin: 0;
+}
+
+ol.search-results > li {
+    border-bottom: 1px solid #E1E1E1; /* Same color as tr in Skeleton. */
+}
+
+ol.search-results p.author {
+    font-size: 0.85em;
+    margin-bottom: 0.25em;
+}
+
+a {
+    text-decoration: none;
 }

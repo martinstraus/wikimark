@@ -26,7 +26,6 @@ package org.wikimark;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
