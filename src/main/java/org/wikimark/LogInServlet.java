@@ -54,7 +54,7 @@ public class LogInServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             req.login(req.getParameter("j_username"), req.getParameter("j_password"));
-            resp.sendRedirect("/");
+            resp.sendRedirect("/index.html");
         } catch (ServletException ex) {
             req.setAttribute("mensaje", "Authentication error. Check your username and password.");
             render(req, resp);

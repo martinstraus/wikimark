@@ -51,6 +51,7 @@ public class NewPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setHeader("Content-Type", "text/html; charset=utf-8");
         WebContext webContext = new WebContext(req, resp, req.getServletContext());
         thymeleaf.process("/new-page", webContext, resp.getWriter());
     }

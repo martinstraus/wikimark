@@ -53,6 +53,7 @@ public class IndexServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setHeader("Content-Type", "text/html; charset=utf-8");
         WebContext ctx = new WebContext(req, resp, req.getServletContext());
         ctx.setVariable("pages", pages());
         thymeleaf.process("/index.html", ctx, resp.getWriter());

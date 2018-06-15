@@ -81,6 +81,7 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
     private void showOne(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         final Optional<Page> foundPage = new PageRequest(pages, req).page();
         if (foundPage.isPresent()) {
+            resp.setHeader("Content-Type", "text/html; charset=utf-8");
             final Page page = foundPage.get();
             WebContext webContext = new WebContext(req, resp, req.getServletContext());
             webContext.setVariable("page", page.pageContext());
