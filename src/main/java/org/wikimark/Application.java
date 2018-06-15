@@ -44,17 +44,17 @@ public class Application implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         try {
-            var sc = sce.getServletContext();
-            var context = new Context(sc);
-            var root = new File(System.getProperty("user.home"), ".wikimark");
+            final ServletContext sc = sce.getServletContext();
+            final Context context = new Context(sc);
+            final File root = new File(System.getProperty("user.home"), ".wikimark");
             
-            var thymeleaf = thymeleaf(sc);
+            final TemplateEngine thymeleaf = thymeleaf(sc);
             
             if (!root.exists()) {
                 root.mkdir();
             }
             
-            var pages = new Pages(new File(root, "pages"), Charset.forName("UTF-8"));
+            final Pages pages = new Pages(new File(root, "pages"), Charset.forName("UTF-8"));
             
             new ContextFilter(context);
             new IndexServlet(sc, thymeleaf, context, pages);
@@ -69,12 +69,12 @@ public class Application implements ServletContextListener {
     }
     
     private TemplateEngine thymeleaf(ServletContext servletContext) {
-        var tr = new ServletContextTemplateResolver(servletContext);
+        final ServletContextTemplateResolver tr = new ServletContextTemplateResolver(servletContext);
         tr.setTemplateMode(TemplateMode.HTML);
         tr.setPrefix("/WEB-INF/pages/");
         tr.setSuffix(".html");
         tr.setCharacterEncoding("UTF-8");
-        var te = new TemplateEngine();
+        final TemplateEngine te = new TemplateEngine();
         te.setTemplateResolver(tr);
         te.addDialect(new Java8TimeDialect());
         return te;
