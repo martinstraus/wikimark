@@ -26,10 +26,13 @@ package org.wikimark;
 import java.io.IOException;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 
 /**
  *
@@ -37,23 +40,26 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class IndexServlet extends HttpServlet {
 
+    private final TemplateEngine thymeleaf;
     private final Context context;
     private final Pages pages;
-    
-    public IndexServlet(Context context, Pages pages) {
+
+    public IndexServlet(ServletContext ctx, TemplateEngine thymeleaf, Context context, Pages pages) {
+        this.thymeleaf = thymeleaf;
         this.context = context;
         this.pages = pages;
+        ctx.addServlet(IndexServlet.class.getName(), this).addMapping("/");
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        new Request(req)
-            .withAttribute("latestPages", latestPages())
-            .forwardTo("/WEB-INF/pages/index.jsp", resp);
+        WebContext ctx = new WebContext(req, resp, req.getServletContext());
+        ctx.setVariable("latestPages", latestPages());
+        thymeleaf.process("/index.html", ctx, resp.getWriter());
     }
-    
+
     private List<PageContext> latestPages() {
         return pages.findLatest(5).stream().map((p) -> p.pageContext()).collect(toList());
     }
-    
+
 }

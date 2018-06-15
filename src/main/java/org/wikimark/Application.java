@@ -56,13 +56,13 @@ public class Application implements ServletContextListener {
             
             final Pages pages = new Pages(new File(root, "pages"), Charset.forName("UTF-8"));
             
+            new ContextFilter(context);
+            new IndexServlet(sc, thymeleaf, context, pages);
             new LogInServlet(sc, thymeleaf);
             new LogOutServlet(sc);
             new NewPageServlet(sc, thymeleaf, context, pages);
             new PageServlet(sc, thymeleaf, context, pages);
             new AttachmentServlet(sc, thymeleaf, root);
-            context.registerServlet("index", new IndexServlet(context, pages), "/index.html");
-            new ContextFilter(context);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
