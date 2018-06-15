@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/martinstraus/wikimark.svg?branch=master)](https://travis-ci.org/martinstraus/wikimark)
+
 # WikiMark
 
 **WikiMark** is a super simple, minimalistic, no-nonsense [wiki](https://en.wikipedia.org/wiki/Wiki).
