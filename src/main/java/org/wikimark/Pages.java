@@ -35,6 +35,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -65,7 +66,7 @@ public class Pages {
     }
 
     private Page loadPageFrom(File file, String name) {
-        try (FileInputStream input = new FileInputStream(file)) {
+        try ( FileInputStream input = new FileInputStream(file)) {
             final AST ast = new Parser().parse(input);
             return new Page(
                 name,
@@ -121,6 +122,12 @@ public class Pages {
     }
 
     public Set<Page> all() {
+        var pages = new TreeSet<>(Page.SORT_BY_TITLE);
+        pages.addAll(findAllPages());
+        return pages;
+    }
+
+    private Set<Page> findAllPages() {
         try {
             return Files.list(root.toPath())
                 .filter((p) -> p.toString().endsWith(".md"))

@@ -54,11 +54,11 @@ public class IndexServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         WebContext ctx = new WebContext(req, resp, req.getServletContext());
-        ctx.setVariable("latestPages", latestPages());
+        ctx.setVariable("pages", pages());
         thymeleaf.process("/index.html", ctx, resp.getWriter());
     }
 
-    private List<PageContext> latestPages() {
+    private List<PageContext> pages() {
         return pages.findLatest(5).stream().map((p) -> p.pageContext()).collect(toList());
     }
 

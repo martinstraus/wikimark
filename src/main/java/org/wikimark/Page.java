@@ -25,6 +25,7 @@ package org.wikimark;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +41,8 @@ import org.apache.lucene.document.TextField;
  * @author Martín Straus
  */
 public class Page {
+
+    public static Comparator<Page> SORT_BY_TITLE = (Page a, Page b) -> a.title.compareTo(b.title);
 
     private final String name;
     private final String title;
