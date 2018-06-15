@@ -54,6 +54,11 @@ THE SOFTWARE.
                         </a>
                     </li>
                     <li>
+                        <a th:href="@{/attachments}" th:if="${#request.userPrincipal != null}" title="Upload file">
+                            <i class="fa fa-upload"></i><span class="shown-only tablet desktop">&nbsp;Upload file</span>
+                        </a>
+                    </li>
+                    <li>
                         <a th:href="@{/logout}" th:if="${#request.userPrincipal != null}" title="Sign out">
                             <i class="fa fa-sign-out"></i><span class="shown-only tablet desktop">&nbsp;Sign out</span>
                         </a>

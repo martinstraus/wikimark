@@ -60,14 +60,8 @@ public class Application implements ServletContextListener {
             new LogOutServlet(sc);
             new NewPageServlet(sc, thymeleaf, context, pages);
             new PageServlet(sc, thymeleaf, context, pages);
-            context
-                .registerServlet("index", new IndexServlet(context, pages), "/index.html")
-                .registerServlet(
-                    "Attachments", 
-                    new AttachmentServlet(new File(root, "attachments").toPath()), 
-                    new MultipartConfigElement(new File(root, "attachments").getAbsolutePath()),
-                    "/attachments/*"
-                );
+            new AttachmentServlet(sc, thymeleaf, root);
+            context.registerServlet("index", new IndexServlet(context, pages), "/index.html");
             new ContextFilter(context);
         } catch (IOException ex) {
             throw new RuntimeException(ex);

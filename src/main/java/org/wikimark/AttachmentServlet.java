@@ -26,8 +26,13 @@ package org.wikimark;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import javax.servlet.http.*;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 
 /**
  *
@@ -52,15 +57,21 @@ public class AttachmentServlet extends HttpServlet {
     }
 
     private final Path root;
+    private final TemplateEngine thymeleaf;
 
-    public AttachmentServlet(Path root) {
-        this.root = root;
+    public AttachmentServlet(ServletContext ctx, TemplateEngine thymeleaf, File root) {
+        this.thymeleaf = thymeleaf;
+        this.root = root.toPath();
+        ServletRegistration.Dynamic registration = ctx.addServlet(AttachmentServlet.class.getName(), this);
+        registration.addMapping("/attachments/*");
+        registration.setMultipartConfig(new MultipartConfigElement(new File(root, "attachments").getAbsolutePath()));
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getPathInfo() == null || req.getPathInfo().isEmpty()) {
-            req.getRequestDispatcher("WEB-INF/pages/new-attachment.jsp").forward(req, resp);
+            WebContext ctx = new WebContext(req, resp, req.getServletContext());
+            thymeleaf.process("/new-attachment", ctx, resp.getWriter());
         } else {
             Files.copy(pathRelativeToRoot(req.getPathInfo()), resp.getOutputStream());
         }

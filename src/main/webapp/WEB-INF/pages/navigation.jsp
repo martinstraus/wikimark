@@ -32,6 +32,7 @@ THE SOFTWARE.
                     </c:if>
                     <c:if test="${not empty pageContext.request.userPrincipal}">
             <li><a href="${context.urlRelativeToHost('/new-page')}" title="Create new page"><i class="fa fa-plus"></i><span class="shown-only tablet desktop">&nbsp;Create new page</span></a></a></li>
+                <li><a href="${context.urlRelativeToHost('/attachments')}" title="Upload file"><i class="fa fa-plus"></i><span class="shown-only tablet desktop">&nbsp;Upload file</span></a></a></li>
             <li><a href="${context.urlRelativeToHost('/logout')}" title="Sign out"><i class="fa fa-sign-out"></i><span class="shown-only tablet desktop">&nbsp;Sign out</span></a></li>
                     </c:if>
     </ul>
