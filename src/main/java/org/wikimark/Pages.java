@@ -32,6 +32,7 @@ import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -69,12 +70,7 @@ public class Pages {
         try ( FileInputStream input = new FileInputStream(file)) {
             final AST ast = new Parser().parse(input);
             return new Page(
-                name,
-                ast.title(),
-                ast.author(),
-                ast.content(),
-                ast.keywords(),
-                Files.readAttributes(file.toPath(), BasicFileAttributes.class).creationTime().toInstant()
+                name, ast.title(), ast.author(), ast.content(), ast.keywords(), creationLocalDateTime(file)
             );
         } catch (IOException ex) {
             throw new RuntimeException(ex);
@@ -85,19 +81,18 @@ public class Pages {
         try {
             final File file = new java.io.File(root, name);
             saveToFile(file, title, author, content, keywords);
-            final Page page = new Page(
-                name,
-                title,
-                author,
-                content,
-                keywords,
-                Files.readAttributes(file.toPath(), BasicFileAttributes.class).creationTime().toInstant()
-            );
+            final Page page = new Page(name, title, author, content, keywords, creationLocalDateTime(file));
             index.index(page);
             return page;
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    private LocalDateTime creationLocalDateTime(File file) throws IOException {
+        return Dates.fileTimeToLocalDateTime(
+            Files.readAttributes(file.toPath(), BasicFileAttributes.class).creationTime()
+        );
     }
 
     public Pages update(String name, String title, String author, String content, Set<String> keywords) {

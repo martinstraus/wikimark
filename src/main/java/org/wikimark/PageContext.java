@@ -23,7 +23,7 @@
  */
 package org.wikimark;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -44,7 +44,7 @@ public interface PageContext {
 
     String url(Context appContext);
 
-    Instant creationTime();
+    LocalDateTime creationTime();
 
     String rawContent();
 

@@ -47,7 +47,7 @@ THE SOFTWARE.
                     </div>
                     <div class="row">
                         <label>on</label>
-                        <p th:text="${#temporals.formatISO(page.creationTime())}"> july 14, 2018</p>
+                        <p th:text="${#temporals.format(page.creationTime(), 'dd/MMM/yyyy', locale)}"> july 14, 2018</p>
                     </div>
                     <div class="row">
                         <label>Tags</label>

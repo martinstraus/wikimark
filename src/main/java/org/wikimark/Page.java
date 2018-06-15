@@ -23,7 +23,8 @@
  */
 package org.wikimark;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -49,9 +50,9 @@ public class Page {
     private final String author;
     private final String content;
     private final Set<String> keywords;
-    private final Instant creationTime;
+    private final LocalDateTime creationTime;
 
-    public Page(String name, String title, String author, String content, Set<String> keywords, Instant creationTime) {
+    public Page(String name, String title, String author, String content, Set<String> keywords, LocalDateTime creationTime) {
         this.name = name;
         this.title = title;
         this.author = author;
@@ -69,10 +70,10 @@ public class Page {
         document.add(new Field("content", content, TextField.TYPE_STORED));
         document.add(new Field(
             "creationDate",
-            DateTools.timeToString(creationTime.getEpochSecond(), DateTools.Resolution.MINUTE),
+            DateTools.dateToString(Dates.localDateTimeToDate(creationTime), DateTools.Resolution.MINUTE),
             StringField.TYPE_STORED
         ));
-        document.add(new NumericDocValuesField("creationDate", creationTime.getEpochSecond()));
+        document.add(new NumericDocValuesField("creationDate", creationTime.toEpochSecond(ZoneOffset.UTC)));
         return document;
     }
 
@@ -127,7 +128,7 @@ public class Page {
                 return urlRelativeToHost(appContext);
             }
 
-            public Instant creationTime() {
+            public LocalDateTime creationTime() {
                 return creationTime;
             }
 

@@ -23,10 +23,13 @@
  */
 package org.wikimark;
 
+import java.nio.file.attribute.FileTime;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.Date;
 
 /**
  *
@@ -36,6 +39,14 @@ public class Dates {
 
     public static String format(Instant instant) {
         return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).withZone(ZoneId.systemDefault()).format(instant);
+    }
+    
+    public static Date localDateTimeToDate(LocalDateTime ldt) {
+        return Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+    }
+    
+    public static LocalDateTime fileTimeToLocalDateTime(FileTime ft) {
+        return LocalDateTime.from(ft.toInstant().atZone(ZoneId.systemDefault()));
     }
 
 }
