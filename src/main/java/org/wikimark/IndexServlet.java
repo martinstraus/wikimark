@@ -60,7 +60,7 @@ public class IndexServlet extends HttpServlet {
     }
 
     private List<PageContext> pages() {
-        return pages.findLatest(5).stream().map((p) -> p.pageContext()).collect(toList());
+        return pages.findLatest(20).stream().map((p) -> p.pageContext()).collect(toList());
     }
 
 }
