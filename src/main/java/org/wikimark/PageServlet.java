@@ -99,6 +99,7 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
         } else {
             WebContext webContext = new WebContext(req, resp, req.getServletContext());
             webContext.setVariable("page", page.get().pageContext());
+            resp.setCharacterEncoding("UTF-8");
             thymeleaf.process("/edit-page", webContext, resp.getWriter());
         }
     }
