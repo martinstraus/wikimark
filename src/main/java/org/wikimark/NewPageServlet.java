@@ -58,6 +58,7 @@ public class NewPageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         final NewPageForm form = new NewPageForm(req).validate();
         Page page = pages.create(form.name(), form.title(), req.getUserPrincipal().getName(), form.content(), form.keywords());
         new Response(resp).redirectTo(page.urlRelativeToHost(context));
