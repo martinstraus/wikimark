@@ -109,6 +109,7 @@ public class PageServlet extends javax.servlet.http.HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         switch (new Request(req).parameter("_method", "post")) {
             case "post":
                 create(req, resp);
